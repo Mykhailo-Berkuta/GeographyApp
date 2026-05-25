@@ -40,22 +40,22 @@
             btnRegions = new Button();
             btnCountries = new Button();
             btnContinents = new Button();
-            dataGridView = new DataGridView();
+            statusStrip1 = new StatusStrip();
+            statusLabel = new ToolStripStatusLabel();
             toolStrip1 = new ToolStrip();
             btnAdd = new ToolStripButton();
             btnEdit = new ToolStripButton();
             btnDelete = new ToolStripButton();
             btnShowMap = new ToolStripButton();
-            statusStrip1 = new StatusStrip();
-            statusLabel = new ToolStripStatusLabel();
+            dataGridView = new DataGridView();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
-            toolStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
+            toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -131,6 +131,7 @@
             btnCities.TabIndex = 3;
             btnCities.Text = "Міста";
             btnCities.UseVisualStyleBackColor = true;
+            btnCities.Click += btnCities_Click;
             // 
             // btnRegions
             // 
@@ -143,6 +144,7 @@
             btnRegions.TabIndex = 2;
             btnRegions.Text = "Регіони";
             btnRegions.UseVisualStyleBackColor = true;
+            btnRegions.Click += btnRegions_Click;
             // 
             // btnCountries
             // 
@@ -155,6 +157,7 @@
             btnCountries.TabIndex = 1;
             btnCountries.Text = "Країни";
             btnCountries.UseVisualStyleBackColor = true;
+            btnCountries.Click += btnCountries_Click;
             // 
             // btnContinents
             // 
@@ -167,20 +170,22 @@
             btnContinents.TabIndex = 0;
             btnContinents.Text = "Материки";
             btnContinents.UseVisualStyleBackColor = true;
+            btnContinents.Click += btnContinents_Click;
             // 
-            // dataGridView
+            // statusStrip1
             // 
-            dataGridView.AllowUserToAddRows = false;
-            dataGridView.AllowUserToDeleteRows = false;
-            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView.Dock = DockStyle.Fill;
-            dataGridView.Location = new Point(0, 0);
-            dataGridView.MultiSelect = false;
-            dataGridView.Name = "dataGridView";
-            dataGridView.ReadOnly = true;
-            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView.Size = new Size(844, 537);
-            dataGridView.TabIndex = 1;
+            statusStrip1.Items.AddRange(new ToolStripItem[] { statusLabel });
+            statusStrip1.Location = new Point(0, 515);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(844, 22);
+            statusStrip1.TabIndex = 2;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // statusLabel
+            // 
+            statusLabel.Name = "statusLabel";
+            statusLabel.Size = new Size(45, 17);
+            statusLabel.Text = "Готово";
             // 
             // toolStrip1
             // 
@@ -223,20 +228,19 @@
             btnShowMap.Size = new Size(72, 22);
             btnShowMap.Text = "На карті";
             // 
-            // statusStrip1
+            // dataGridView
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { statusLabel });
-            statusStrip1.Location = new Point(0, 515);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(844, 22);
-            statusStrip1.TabIndex = 2;
-            statusStrip1.Text = "statusStrip1";
-            // 
-            // statusLabel
-            // 
-            statusLabel.Name = "statusLabel";
-            statusLabel.Size = new Size(45, 17);
-            statusLabel.Text = "Готово";
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.Location = new Point(0, 0);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.ReadOnly = true;
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.Size = new Size(844, 537);
+            dataGridView.TabIndex = 1;
             // 
             // MainForm
             // 
@@ -255,11 +259,11 @@
             splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
-            toolStrip1.ResumeLayout(false);
-            toolStrip1.PerformLayout();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
+            toolStrip1.ResumeLayout(false);
+            toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }

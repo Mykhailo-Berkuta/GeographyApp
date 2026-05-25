@@ -36,6 +36,7 @@ namespace GeographyApp
 
         private void ShowCountries()
         {
+            dataGridView.Tag = "continents";
             dataGridView.DataSource = _dataManager.Countries
                 .Select(c => new
                 {
@@ -76,6 +77,21 @@ namespace GeographyApp
                     Довгота = c.Longitude
                 }).ToList();
             statusLabel.Text = $"Міста: {_dataManager.Cities.Count} записів";
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            // Визначаємо який розділ зараз активний
+            // і відкриваємо відповідну форму
+            if (dataGridView.Tag?.ToString() == "continents")
+            {
+                using var form = new Forms.ContinentForm();
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    _dataManager.Continents.Add(form.Result);
+                    ShowContinents();
+                }
+            }
         }
     }
 }

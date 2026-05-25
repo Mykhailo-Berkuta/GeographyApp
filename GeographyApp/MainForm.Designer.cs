@@ -203,6 +203,7 @@
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(66, 22);
             btnAdd.Text = "Додати";
+            btnAdd.Click += btnAdd_Click;
             // 
             // btnEdit
             // 

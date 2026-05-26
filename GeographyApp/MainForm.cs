@@ -142,5 +142,86 @@ namespace GeographyApp
                 }
             }
         }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (dataGridView.CurrentRow == null) return;
+            int index = dataGridView.CurrentRow.Index;
+
+            if (dataGridView.Tag?.ToString() == "continents")
+            {
+                var continent = _dataManager.Continents[index];
+                using var form = new Forms.ContinentForm(continent);
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    _dataManager.Continents[index] = form.Result;
+                    ShowContinents();
+                }
+            }
+            else if (dataGridView.Tag?.ToString() == "countries")
+            {
+                var country = _dataManager.Countries[index];
+                using var form = new Forms.CountryForm(_dataManager.Continents, country);
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    _dataManager.Countries[index] = form.Result;
+                    ShowCountries();
+                }
+            }
+            else if (dataGridView.Tag?.ToString() == "regions")
+            {
+                var region = _dataManager.Regions[index];
+                using var form = new Forms.RegionForm(_dataManager.Countries, region);
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    _dataManager.Regions[index] = form.Result;
+                    ShowRegions();
+                }
+            }
+            else if (dataGridView.Tag?.ToString() == "cities")
+            {
+                var city = _dataManager.Cities[index];
+                using var form = new Forms.CityForm(
+                    _dataManager.Countries, _dataManager.Regions, city);
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    _dataManager.Cities[index] = form.Result;
+                    ShowCities();
+                }
+            }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (dataGridView.CurrentRow == null) return;
+            int index = dataGridView.CurrentRow.Index;
+
+            var confirm = MessageBox.Show(
+                "Ви впевнені що хочете видалити цей запис?",
+                "Підтвердження", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (confirm != DialogResult.Yes) return;
+
+            if (dataGridView.Tag?.ToString() == "continents")
+            {
+                _dataManager.Continents.RemoveAt(index);
+                ShowContinents();
+            }
+            else if (dataGridView.Tag?.ToString() == "countries")
+            {
+                _dataManager.Countries.RemoveAt(index);
+                ShowCountries();
+            }
+            else if (dataGridView.Tag?.ToString() == "regions")
+            {
+                _dataManager.Regions.RemoveAt(index);
+                ShowRegions();
+            }
+            else if (dataGridView.Tag?.ToString() == "cities")
+            {
+                _dataManager.Cities.RemoveAt(index);
+                ShowCities();
+            }
+        }
     }
 }

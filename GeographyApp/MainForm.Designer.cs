@@ -212,6 +212,7 @@
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(87, 22);
             btnEdit.Text = "Редагувати";
+            btnEdit.Click += this.toolStripButton1_Click;
             // 
             // btnDelete
             // 

@@ -124,6 +124,23 @@ namespace GeographyApp
                     ShowRegions();
                 }
             }
+
+            else if (dataGridView.Tag?.ToString() == "cities")
+            {
+                if (_dataManager.Countries.Count == 0)
+                {
+                    MessageBox.Show("Спочатку додайте хоча б одну країну!",
+                        "Увага", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                using var form = new Forms.CityForm(
+                    _dataManager.Countries, _dataManager.Regions);
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    _dataManager.Cities.Add(form.Result);
+                    ShowCities();
+                }
+            }
         }
     }
 }

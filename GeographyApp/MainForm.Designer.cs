@@ -35,11 +35,11 @@
             menuLoad = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             menuExit = new ToolStripMenuItem();
-            даніToolStripMenuItem = new ToolStripMenuItem();
             пошукToolStripMenuItem = new ToolStripMenuItem();
             menuStats = new ToolStripMenuItem();
             статистикаНаселенняToolStripMenuItem = new ToolStripMenuItem();
             довідкаToolStripMenuItem = new ToolStripMenuItem();
+            menuAbout = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             btnCities = new Button();
             btnRegions = new Button();
@@ -56,6 +56,7 @@
             txtSearch = new ToolStripTextBox();
             btnSearch = new ToolStripButton();
             dataGridView = new DataGridView();
+            toolStripMenuItem1 = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -68,7 +69,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { menuSave, даніToolStripMenuItem, пошукToolStripMenuItem, menuStats, довідкаToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menuSave, toolStripMenuItem1, пошукToolStripMenuItem, menuStats, довідкаToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1008, 24);
@@ -108,12 +109,6 @@
             menuExit.Text = "Вихід";
             menuExit.Click += menuExit_Click;
             // 
-            // даніToolStripMenuItem
-            // 
-            даніToolStripMenuItem.Name = "даніToolStripMenuItem";
-            даніToolStripMenuItem.Size = new Size(43, 20);
-            даніToolStripMenuItem.Text = "Дані";
-            // 
             // пошукToolStripMenuItem
             // 
             пошукToolStripMenuItem.Name = "пошукToolStripMenuItem";
@@ -136,9 +131,17 @@
             // 
             // довідкаToolStripMenuItem
             // 
+            довідкаToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuAbout });
             довідкаToolStripMenuItem.Name = "довідкаToolStripMenuItem";
             довідкаToolStripMenuItem.Size = new Size(61, 20);
             довідкаToolStripMenuItem.Text = "Довідка";
+            // 
+            // menuAbout
+            // 
+            menuAbout.Name = "menuAbout";
+            menuAbout.Size = new Size(180, 22);
+            menuAbout.Text = "Про програму";
+            menuAbout.Click += menuAbout_Click;
             // 
             // splitContainer1
             // 
@@ -310,6 +313,12 @@
             dataGridView.Size = new Size(844, 537);
             dataGridView.TabIndex = 1;
             // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(43, 20);
+            toolStripMenuItem1.Text = "Дані";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -365,5 +374,7 @@
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem menuExit;
         private ToolStripMenuItem статистикаНаселенняToolStripMenuItem;
+        private ToolStripMenuItem menuAbout;
+        private ToolStripMenuItem toolStripMenuItem1;
     }
 }

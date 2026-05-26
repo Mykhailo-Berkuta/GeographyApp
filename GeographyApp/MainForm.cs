@@ -387,6 +387,21 @@ namespace GeographyApp
             dataGridView.DataSource = stats;
             statusLabel.Text = "Статистика населення по материках";
         }
-    }
 
+        private void menuAbout_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Географічний довідник\n\n" +
+                "Програма для зберігання та перегляду\n" +
+                "географічних об'єктів: материків, країн,\n" +
+                "регіонів та міст.\n\n" +
+                "Автор: Беркута М.С.\n" +
+                "ХНУРЕ, 2026",
+                "Про програму",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
+
+    }
 }

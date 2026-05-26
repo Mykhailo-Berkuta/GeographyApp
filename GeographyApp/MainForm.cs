@@ -76,8 +76,6 @@ namespace GeographyApp
                     Країна = c.Country.Name,
                     Регіон = c.Region.Name,
                     Населення = c.Population.ToString("N0"),
-                    Широта = c.Latitude,
-                    Довгота = c.Longitude
                 }).ToList();
             statusLabel.Text = $"Міста: {_dataManager.Cities.Count} записів";
         }
@@ -295,8 +293,6 @@ namespace GeographyApp
                         Країна = c.Country.Name,
                         Регіон = c.Region.Name,
                         Населення = c.Population.ToString("N0"),
-                        Широта = c.Latitude,
-                        Довгота = c.Longitude
                     }).ToList();
             }
 
@@ -312,6 +308,47 @@ namespace GeographyApp
                 case "regions": ShowRegions(); break;
                 case "cities": ShowCities(); break;
             }
+        }
+
+        private void btnShowMap_Click(object sender, EventArgs e)
+        {
+            if (dataGridView.CurrentRow == null)
+            {
+                MessageBox.Show("Виділіть запис у таблиці.",
+                    "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            int index = dataGridView.CurrentRow.Index;
+            string query = "";
+
+            if (dataGridView.Tag?.ToString() == "continents")
+            {
+                var continent = _dataManager.Continents[index];
+                query = continent.Name;
+            }
+            else if (dataGridView.Tag?.ToString() == "countries")
+            {
+                var country = _dataManager.Countries[index];
+                query = country.Name;
+            }
+            else if (dataGridView.Tag?.ToString() == "regions")
+            {
+                var region = _dataManager.Regions[index];
+                query = $"{region.Name}, {region.Country.Name}";
+            }
+            else if (dataGridView.Tag?.ToString() == "cities")
+            {
+                var city = _dataManager.Cities[index];
+                query = $"{city.Name}, {city.Country.Name}";
+            }
+
+            string url = $"https://www.google.com/maps/search/{Uri.EscapeDataString(query)}";
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
         }
     }
 }

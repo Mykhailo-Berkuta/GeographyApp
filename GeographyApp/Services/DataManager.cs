@@ -42,15 +42,12 @@ namespace GeographyApp.Services
             Regions.AddRange(new[] { kharkivRegion, kyivRegion });
 
             // Міста
-            var kharkiv = new City("Харків", 1_433_000, 49.9935, 36.2304,
-                kharkivRegion, ukraine);
-            var kyiv = new City("Київ", 2_962_000, 50.4501, 30.5234,
-                kyivRegion, ukraine);
+            var kharkiv = new City("Харків", 1_433_000, kharkivRegion, ukraine);
+            var kyiv = new City("Київ", 2_962_000, kyivRegion, ukraine);
             Cities.AddRange(new[] { kharkiv, kyiv });
         }
 
         /// Зберігає всі дані у JSON файл.
-        /// </summary>
         public void Save()
         {
             var data = new AppData
@@ -77,8 +74,6 @@ namespace GeographyApp.Services
                 {
                     Name = c.Name,
                     Population = c.Population,
-                    Latitude = c.Latitude,
-                    Longitude = c.Longitude,
                     RegionName = c.Region.Name,
                     CountryName = c.Country.Name
                 }).ToList()
@@ -116,7 +111,7 @@ namespace GeographyApp.Services
             )).ToList();
 
             Cities = data.Cities.Select(d => new City(
-                d.Name, d.Population, d.Latitude, d.Longitude,
+                d.Name, d.Population,
                 Regions.First(r => r.Name == d.RegionName),
                 Countries.First(c => c.Name == d.CountryName)
             )).ToList();
@@ -154,8 +149,6 @@ namespace GeographyApp.Services
         {
             public string Name { get; set; }
             public long Population { get; set; }
-            public double Latitude { get; set; }
-            public double Longitude { get; set; }
             public string RegionName { get; set; }
             public string CountryName { get; set; }
         }

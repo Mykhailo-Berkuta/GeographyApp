@@ -233,6 +233,7 @@
             btnShowMap.Name = "btnShowMap";
             btnShowMap.Size = new Size(72, 22);
             btnShowMap.Text = "На карті";
+            btnShowMap.Click += btnShowMap_Click;
             // 
             // toolStripLabel1
             // 

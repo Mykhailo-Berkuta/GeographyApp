@@ -37,8 +37,6 @@ namespace GeographyApp.Forms
         {
             txtName.Text = city.Name;
             txtPopulation.Text = city.Population.ToString();
-            txtLatitude.Text = city.Latitude.ToString();
-            txtLongitude.Text = city.Longitude.ToString();
             cmbCountry.SelectedItem = _countries
                 .FirstOrDefault(c => c.Name == city.Country.Name);
             cmbRegion.SelectedItem = _regions
@@ -66,8 +64,6 @@ namespace GeographyApp.Forms
             Result = new City(
                 txtName.Text.Trim(),
                 long.Parse(txtPopulation.Text.Trim()),
-                double.Parse(txtLatitude.Text.Trim()),
-                double.Parse(txtLongitude.Text.Trim()),
                 (Region)cmbRegion.SelectedItem,
                 (Country)cmbCountry.SelectedItem
             );

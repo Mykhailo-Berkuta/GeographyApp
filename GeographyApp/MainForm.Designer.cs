@@ -212,7 +212,7 @@
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(87, 22);
             btnEdit.Text = "Редагувати";
-            btnEdit.Click += this.toolStripButton1_Click;
+            btnEdit.Click += btnEdit_Click;
             // 
             // btnDelete
             // 
@@ -221,6 +221,7 @@
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(79, 22);
             btnDelete.Text = "Видалити";
+            btnDelete.Click += btnDelete_Click;
             // 
             // btnShowMap
             // 

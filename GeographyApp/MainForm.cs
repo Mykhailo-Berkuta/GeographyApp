@@ -230,5 +230,88 @@ namespace GeographyApp
             base.OnFormClosing(e);
             _dataManager.Save();
         }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string query = txtSearch.Text.Trim().ToLower();
+
+            if (string.IsNullOrEmpty(query))
+            {
+                // Якщо пошук порожній показуємо всі дані
+                RefreshCurrentView();
+                return;
+            }
+
+            if (dataGridView.Tag?.ToString() == "continents")
+            {
+                dataGridView.DataSource = _dataManager.Continents
+                    .Where(c => c.Name.ToLower().Contains(query))
+                    .Select(c => new
+                    {
+                        Назва = c.Name,
+                        Населення = c.Population.ToString("N0"),
+                        Площа_км2 = c.Area.ToString("N0")
+                    }).ToList();
+            }
+            else if (dataGridView.Tag?.ToString() == "countries")
+            {
+                dataGridView.DataSource = _dataManager.Countries
+                    .Where(c => c.Name.ToLower().Contains(query) ||
+                                c.Capital.ToLower().Contains(query) ||
+                                c.Continent.Name.ToLower().Contains(query))
+                    .Select(c => new
+                    {
+                        Назва = c.Name,
+                        Материк = c.Continent.Name,
+                        Населення = c.Population.ToString("N0"),
+                        Площа_км2 = c.Area.ToString("N0"),
+                        Столиця = c.Capital,
+                        Форма_правління = c.GovernmentForm
+                    }).ToList();
+            }
+            else if (dataGridView.Tag?.ToString() == "regions")
+            {
+                dataGridView.DataSource = _dataManager.Regions
+                    .Where(r => r.Name.ToLower().Contains(query) ||
+                                r.Country.Name.ToLower().Contains(query))
+                    .Select(r => new
+                    {
+                        Назва = r.Name,
+                        Тип = r.RegionType,
+                        Країна = r.Country.Name,
+                        Населення = r.Population.ToString("N0"),
+                        Адм_центр = r.Capital
+                    }).ToList();
+            }
+            else if (dataGridView.Tag?.ToString() == "cities")
+            {
+                dataGridView.DataSource = _dataManager.Cities
+                    .Where(c => c.Name.ToLower().Contains(query) ||
+                                c.Country.Name.ToLower().Contains(query) ||
+                                c.Region.Name.ToLower().Contains(query))
+                    .Select(c => new
+                    {
+                        Назва = c.Name,
+                        Країна = c.Country.Name,
+                        Регіон = c.Region.Name,
+                        Населення = c.Population.ToString("N0"),
+                        Широта = c.Latitude,
+                        Довгота = c.Longitude
+                    }).ToList();
+            }
+
+            statusLabel.Text = $"Знайдено записів: {dataGridView.Rows.Count}";
+        }
+
+        private void RefreshCurrentView()
+        {
+            switch (dataGridView.Tag?.ToString())
+            {
+                case "continents": ShowContinents(); break;
+                case "countries": ShowCountries(); break;
+                case "regions": ShowRegions(); break;
+                case "cities": ShowCities(); break;
+            }
+        }
     }
 }

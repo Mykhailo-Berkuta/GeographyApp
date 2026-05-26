@@ -47,6 +47,9 @@
             btnEdit = new ToolStripButton();
             btnDelete = new ToolStripButton();
             btnShowMap = new ToolStripButton();
+            toolStripLabel1 = new ToolStripLabel();
+            txtSearch = new ToolStripTextBox();
+            btnSearch = new ToolStripButton();
             dataGridView = new DataGridView();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -189,7 +192,7 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new ToolStripItem[] { btnAdd, btnEdit, btnDelete, btnShowMap });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { btnAdd, btnEdit, btnDelete, btnShowMap, toolStripLabel1, txtSearch, btnSearch });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(844, 25);
@@ -230,6 +233,27 @@
             btnShowMap.Name = "btnShowMap";
             btnShowMap.Size = new Size(72, 22);
             btnShowMap.Text = "На карті";
+            // 
+            // toolStripLabel1
+            // 
+            toolStripLabel1.Name = "toolStripLabel1";
+            toolStripLabel1.Size = new Size(49, 22);
+            toolStripLabel1.Text = "Пошук:";
+            // 
+            // txtSearch
+            // 
+            txtSearch.Name = "txtSearch";
+            txtSearch.Size = new Size(100, 25);
+            // 
+            // btnSearch
+            // 
+            btnSearch.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnSearch.Image = (Image)resources.GetObject("btnSearch.Image");
+            btnSearch.ImageTransparentColor = Color.Magenta;
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(23, 22);
+            btnSearch.Text = "toolStripButton1";
+            btnSearch.Click += btnSearch_Click;
             // 
             // dataGridView
             // 
@@ -292,5 +316,8 @@
         private DataGridView dataGridView;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel statusLabel;
+        private ToolStripLabel toolStripLabel1;
+        private ToolStripTextBox txtSearch;
+        private ToolStripButton btnSearch;
     }
 }

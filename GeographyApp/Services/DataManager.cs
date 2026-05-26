@@ -80,7 +80,12 @@ namespace GeographyApp.Services
             };
 
             var json = JsonSerializer.Serialize(data,
-                new JsonSerializerOptions { WriteIndented = true });
+    new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    });
+
             File.WriteAllText(_filePath, json);
         }
 

@@ -30,7 +30,11 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             menuStrip1 = new MenuStrip();
-            файлToolStripMenuItem = new ToolStripMenuItem();
+            menuSave = new ToolStripMenuItem();
+            зберегтиToolStripMenuItem = new ToolStripMenuItem();
+            menuLoad = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            menuExit = new ToolStripMenuItem();
             даніToolStripMenuItem = new ToolStripMenuItem();
             пошукToolStripMenuItem = new ToolStripMenuItem();
             картаToolStripMenuItem = new ToolStripMenuItem();
@@ -63,18 +67,45 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem, даніToolStripMenuItem, пошукToolStripMenuItem, картаToolStripMenuItem, довідкаToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menuSave, даніToolStripMenuItem, пошукToolStripMenuItem, картаToolStripMenuItem, довідкаToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1008, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
-            // файлToolStripMenuItem
+            // menuSave
             // 
-            файлToolStripMenuItem.Name = "файлToolStripMenuItem";
-            файлToolStripMenuItem.Size = new Size(48, 20);
-            файлToolStripMenuItem.Text = "Файл";
+            menuSave.DropDownItems.AddRange(new ToolStripItem[] { зберегтиToolStripMenuItem, menuLoad, toolStripSeparator1, menuExit });
+            menuSave.Name = "menuSave";
+            menuSave.Size = new Size(48, 20);
+            menuSave.Text = "Файл";
+            // 
+            // зберегтиToolStripMenuItem
+            // 
+            зберегтиToolStripMenuItem.Name = "зберегтиToolStripMenuItem";
+            зберегтиToolStripMenuItem.Size = new Size(180, 22);
+            зберегтиToolStripMenuItem.Text = "Зберегти";
+            зберегтиToolStripMenuItem.Click += menuSave_Click;
+            // 
+            // menuLoad
+            // 
+            menuLoad.Name = "menuLoad";
+            menuLoad.Size = new Size(180, 22);
+            menuLoad.Text = "Завантажити";
+            menuLoad.Click += menuLoad_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(177, 6);
+            // 
+            // menuExit
+            // 
+            menuExit.Name = "menuExit";
+            menuExit.Size = new Size(180, 22);
+            menuExit.Text = "Вихід";
+            menuExit.Click += menuExit_Click;
             // 
             // даніToolStripMenuItem
             // 
@@ -299,7 +330,7 @@
         #endregion
 
         private MenuStrip menuStrip1;
-        private ToolStripMenuItem файлToolStripMenuItem;
+        private ToolStripMenuItem menuSave;
         private ToolStripMenuItem даніToolStripMenuItem;
         private ToolStripMenuItem пошукToolStripMenuItem;
         private ToolStripMenuItem картаToolStripMenuItem;
@@ -320,5 +351,9 @@
         private ToolStripLabel toolStripLabel1;
         private ToolStripTextBox txtSearch;
         private ToolStripButton btnSearch;
+        private ToolStripMenuItem зберегтиToolStripMenuItem;
+        private ToolStripMenuItem menuLoad;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem menuExit;
     }
 }

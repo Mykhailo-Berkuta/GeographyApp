@@ -350,5 +350,25 @@ namespace GeographyApp
                 UseShellExecute = true
             });
         }
+
+        private void menuSave_Click(object sender, EventArgs e)
+        {
+            _dataManager.Save();
+            MessageBox.Show("Дані збережено!", "Збереження",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void menuLoad_Click(object sender, EventArgs e)
+        {
+            _dataManager.Load();
+            RefreshCurrentView();
+            MessageBox.Show("Дані завантажено!", "Завантаження",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void menuExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

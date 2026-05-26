@@ -37,7 +37,8 @@
             menuExit = new ToolStripMenuItem();
             даніToolStripMenuItem = new ToolStripMenuItem();
             пошукToolStripMenuItem = new ToolStripMenuItem();
-            картаToolStripMenuItem = new ToolStripMenuItem();
+            menuStats = new ToolStripMenuItem();
+            статистикаНаселенняToolStripMenuItem = new ToolStripMenuItem();
             довідкаToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             btnCities = new Button();
@@ -67,7 +68,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { menuSave, даніToolStripMenuItem, пошукToolStripMenuItem, картаToolStripMenuItem, довідкаToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menuSave, даніToolStripMenuItem, пошукToolStripMenuItem, menuStats, довідкаToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1008, 24);
@@ -84,26 +85,26 @@
             // зберегтиToolStripMenuItem
             // 
             зберегтиToolStripMenuItem.Name = "зберегтиToolStripMenuItem";
-            зберегтиToolStripMenuItem.Size = new Size(180, 22);
+            зберегтиToolStripMenuItem.Size = new Size(145, 22);
             зберегтиToolStripMenuItem.Text = "Зберегти";
             зберегтиToolStripMenuItem.Click += menuSave_Click;
             // 
             // menuLoad
             // 
             menuLoad.Name = "menuLoad";
-            menuLoad.Size = new Size(180, 22);
+            menuLoad.Size = new Size(145, 22);
             menuLoad.Text = "Завантажити";
             menuLoad.Click += menuLoad_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(177, 6);
+            toolStripSeparator1.Size = new Size(142, 6);
             // 
             // menuExit
             // 
             menuExit.Name = "menuExit";
-            menuExit.Size = new Size(180, 22);
+            menuExit.Size = new Size(145, 22);
             menuExit.Text = "Вихід";
             menuExit.Click += menuExit_Click;
             // 
@@ -119,11 +120,19 @@
             пошукToolStripMenuItem.Size = new Size(58, 20);
             пошукToolStripMenuItem.Text = "Пошук";
             // 
-            // картаToolStripMenuItem
+            // menuStats
             // 
-            картаToolStripMenuItem.Name = "картаToolStripMenuItem";
-            картаToolStripMenuItem.Size = new Size(50, 20);
-            картаToolStripMenuItem.Text = "Карта";
+            menuStats.DropDownItems.AddRange(new ToolStripItem[] { статистикаНаселенняToolStripMenuItem });
+            menuStats.Name = "menuStats";
+            menuStats.Size = new Size(50, 20);
+            menuStats.Text = "Карта";
+            // 
+            // статистикаНаселенняToolStripMenuItem
+            // 
+            статистикаНаселенняToolStripMenuItem.Name = "статистикаНаселенняToolStripMenuItem";
+            статистикаНаселенняToolStripMenuItem.Size = new Size(196, 22);
+            статистикаНаселенняToolStripMenuItem.Text = "Статистика населення";
+            статистикаНаселенняToolStripMenuItem.Click += menuStats_Click;
             // 
             // довідкаToolStripMenuItem
             // 
@@ -333,7 +342,7 @@
         private ToolStripMenuItem menuSave;
         private ToolStripMenuItem даніToolStripMenuItem;
         private ToolStripMenuItem пошукToolStripMenuItem;
-        private ToolStripMenuItem картаToolStripMenuItem;
+        private ToolStripMenuItem menuStats;
         private ToolStripMenuItem довідкаToolStripMenuItem;
         private SplitContainer splitContainer1;
         private Button btnContinents;
@@ -355,5 +364,6 @@
         private ToolStripMenuItem menuLoad;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem menuExit;
+        private ToolStripMenuItem статистикаНаселенняToolStripMenuItem;
     }
 }

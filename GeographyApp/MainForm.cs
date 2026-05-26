@@ -370,5 +370,23 @@ namespace GeographyApp
         {
             Application.Exit();
         }
+
+        private void menuStats_Click(object sender, EventArgs e)
+        {
+            var stats = _dataManager.Continents
+                .Select(c => new
+                {
+                    Материк = c.Name,
+                    Населення = c.Population.ToString("N0"),
+                    Країн = _dataManager.Countries
+                        .Count(co => co.Continent.Name == c.Name),
+                    Міст = _dataManager.Cities
+                        .Count(ci => ci.Country.Continent.Name == c.Name)
+                }).ToList();
+
+            dataGridView.DataSource = stats;
+            statusLabel.Text = "Статистика населення по материках";
+        }
     }
+
 }

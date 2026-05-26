@@ -130,6 +130,7 @@
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
+            MinimizeBox = false;
             Name = "ContinentForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Додавання материка";

@@ -24,6 +24,7 @@ namespace GeographyApp
 
         private void ShowContinents()
         {
+            dataGridView.Tag = "continents";
             dataGridView.DataSource = _dataManager.Continents
                 .Select(c => new
                 {
@@ -36,7 +37,7 @@ namespace GeographyApp
 
         private void ShowCountries()
         {
-            dataGridView.Tag = "continents";
+            dataGridView.Tag = "countries";
             dataGridView.DataSource = _dataManager.Countries
                 .Select(c => new
                 {
@@ -52,6 +53,7 @@ namespace GeographyApp
 
         private void ShowRegions()
         {
+            dataGridView.Tag = "regions";
             dataGridView.DataSource = _dataManager.Regions
                 .Select(r => new
                 {
@@ -66,6 +68,7 @@ namespace GeographyApp
 
         private void ShowCities()
         {
+            dataGridView.Tag = "cities";
             dataGridView.DataSource = _dataManager.Cities
                 .Select(c => new
                 {
@@ -90,6 +93,21 @@ namespace GeographyApp
                 {
                     _dataManager.Continents.Add(form.Result);
                     ShowContinents();
+                }
+            }
+            else if (dataGridView.Tag?.ToString() == "countries")
+            {
+                if (_dataManager.Continents.Count == 0)
+                {
+                    MessageBox.Show("Спочатку додайте хоча б один материк!",
+                        "Увага", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                using var form = new Forms.CountryForm(_dataManager.Continents);
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    _dataManager.Countries.Add(form.Result);
+                    ShowCountries();
                 }
             }
         }

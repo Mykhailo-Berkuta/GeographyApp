@@ -95,6 +95,7 @@
             btnOk.TabIndex = 6;
             btnOk.Text = "OK";
             btnOk.UseVisualStyleBackColor = true;
+            btnOk.Click += btnOk_Click;
             // 
             // btnCancel
             // 
@@ -104,6 +105,7 @@
             btnCancel.TabIndex = 7;
             btnCancel.Text = "Скасувати";
             btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // lblError
             // 

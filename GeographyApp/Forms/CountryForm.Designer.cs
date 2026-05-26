@@ -151,6 +151,7 @@
             btnOk.TabIndex = 13;
             btnOk.Text = "OK";
             btnOk.UseVisualStyleBackColor = true;
+            btnOk.Click += btnOk_Click;
             // 
             // btnCancel
             // 
@@ -160,9 +161,11 @@
             btnCancel.TabIndex = 14;
             btnCancel.Text = "Скасувати";
             btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // cmbContinent
             // 
+            cmbContinent.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbContinent.FormattingEnabled = true;
             cmbContinent.Location = new Point(151, 197);
             cmbContinent.Name = "cmbContinent";

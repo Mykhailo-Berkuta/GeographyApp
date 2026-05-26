@@ -76,12 +76,12 @@ namespace GeographyApp.Forms
             }
             if (!long.TryParse(txtPopulation.Text.Trim(), out long pop) || pop < 0)
             {
-                lblError.Text = "Населення — ціле невід'ємне число!";
+                lblError.Text = "Населення - ціле невід'ємне число!";
                 return false;
             }
             if (!double.TryParse(txtArea.Text.Trim(), out double area) || area <= 0)
             {
-                lblError.Text = "Площа — додатне число!";
+                lblError.Text = "Площа - додатне число!";
                 return false;
             }
             if (string.IsNullOrWhiteSpace(txtCapital.Text))

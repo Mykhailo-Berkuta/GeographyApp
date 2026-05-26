@@ -84,8 +84,6 @@ namespace GeographyApp
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            // Визначаємо який розділ зараз активний
-            // і відкриваємо відповідну форму
             if (dataGridView.Tag?.ToString() == "continents")
             {
                 using var form = new Forms.ContinentForm();
@@ -108,6 +106,22 @@ namespace GeographyApp
                 {
                     _dataManager.Countries.Add(form.Result);
                     ShowCountries();
+                }
+            }
+
+            else if (dataGridView.Tag?.ToString() == "regions")
+            {
+                if (_dataManager.Countries.Count == 0)
+                {
+                    MessageBox.Show("Спочатку додайте хоча б одну країну!",
+                        "Увага", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                using var form = new Forms.RegionForm(_dataManager.Countries);
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    _dataManager.Regions.Add(form.Result);
+                    ShowRegions();
                 }
             }
         }

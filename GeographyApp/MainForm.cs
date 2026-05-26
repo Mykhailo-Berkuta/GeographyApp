@@ -11,7 +11,7 @@ namespace GeographyApp
         public MainForm()
         {
             InitializeComponent();
-            _dataManager.LoadSampleData();
+            _dataManager.Load();
             ShowContinents(); // показуємо материки при запуску
         }
 
@@ -222,6 +222,13 @@ namespace GeographyApp
                 _dataManager.Cities.RemoveAt(index);
                 ShowCities();
             }
+        }
+
+        //збереження при закритті форми
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            _dataManager.Save();
         }
     }
 }

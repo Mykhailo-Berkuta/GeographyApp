@@ -48,5 +48,116 @@ namespace GeographyApp.Services
                 kyivRegion, ukraine);
             Cities.AddRange(new[] { kharkiv, kyiv });
         }
+
+        /// Зберігає всі дані у JSON файл.
+        /// </summary>
+        public void Save()
+        {
+            var data = new AppData
+            {
+                Continents = Continents,
+                Countries = Countries.Select(c => new CountryDto
+                {
+                    Name = c.Name,
+                    Population = c.Population,
+                    Area = c.Area,
+                    GovernmentForm = c.GovernmentForm,
+                    Capital = c.Capital,
+                    ContinentName = c.Continent.Name
+                }).ToList(),
+                Regions = Regions.Select(r => new RegionDto
+                {
+                    Name = r.Name,
+                    Population = r.Population,
+                    RegionType = r.RegionType,
+                    Capital = r.Capital,
+                    CountryName = r.Country.Name
+                }).ToList(),
+                Cities = Cities.Select(c => new CityDto
+                {
+                    Name = c.Name,
+                    Population = c.Population,
+                    Latitude = c.Latitude,
+                    Longitude = c.Longitude,
+                    RegionName = c.Region.Name,
+                    CountryName = c.Country.Name
+                }).ToList()
+            };
+
+            var json = JsonSerializer.Serialize(data,
+                new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_filePath, json);
+        }
+
+        /// Завантаження даних з JSON файлу
+        /// Якщо файл не існує завантажує тестові дані.
+        public void Load()
+        {
+            if (!File.Exists(_filePath))
+            {
+                LoadSampleData();
+                return;
+            }
+
+            var json = File.ReadAllText(_filePath);
+            var data = JsonSerializer.Deserialize<AppData>(json);
+            if (data == null) return;
+
+            Continents = data.Continents;
+
+            Countries = data.Countries.Select(d => new Country(
+                d.Name, d.Population, d.Area, d.GovernmentForm, d.Capital,
+                Continents.First(c => c.Name == d.ContinentName)
+            )).ToList();
+
+            Regions = data.Regions.Select(d => new Region(
+                d.Name, d.Population, d.RegionType, d.Capital,
+                Countries.First(c => c.Name == d.CountryName)
+            )).ToList();
+
+            Cities = data.Cities.Select(d => new City(
+                d.Name, d.Population, d.Latitude, d.Longitude,
+                Regions.First(r => r.Name == d.RegionName),
+                Countries.First(c => c.Name == d.CountryName)
+            )).ToList();
+        }
+
+        // DTO класи для серіалізації
+        private class AppData
+        {
+            public List<Continent> Continents { get; set; } = new();
+            public List<CountryDto> Countries { get; set; } = new();
+            public List<RegionDto> Regions { get; set; } = new();
+            public List<CityDto> Cities { get; set; } = new();
+        }
+
+        private class CountryDto
+        {
+            public string Name { get; set; }
+            public long Population { get; set; }
+            public double Area { get; set; }
+            public string GovernmentForm { get; set; }
+            public string Capital { get; set; }
+            public string ContinentName { get; set; }
+        }
+
+        private class RegionDto
+        {
+            public string Name { get; set; }
+            public long Population { get; set; }
+            public string RegionType { get; set; }
+            public string Capital { get; set; }
+            public string CountryName { get; set; }
+        }
+
+        private class CityDto
+        {
+            public string Name { get; set; }
+            public long Population { get; set; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
+            public string RegionName { get; set; }
+            public string CountryName { get; set; }
+        }
     }
 }

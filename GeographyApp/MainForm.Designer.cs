@@ -35,6 +35,7 @@
             menuLoad = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             menuExit = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripMenuItem();
             пошукToolStripMenuItem = new ToolStripMenuItem();
             menuStats = new ToolStripMenuItem();
             статистикаНаселенняToolStripMenuItem = new ToolStripMenuItem();
@@ -47,7 +48,8 @@
             btnContinents = new Button();
             statusStrip1 = new StatusStrip();
             statusLabel = new ToolStripStatusLabel();
-            toolStrip1 = new ToolStrip();
+            dataGridView = new DataGridView();
+            toolStrip2 = new ToolStrip();
             btnAdd = new ToolStripButton();
             btnEdit = new ToolStripButton();
             btnDelete = new ToolStripButton();
@@ -55,16 +57,14 @@
             toolStripLabel1 = new ToolStripLabel();
             txtSearch = new ToolStripTextBox();
             btnSearch = new ToolStripButton();
-            dataGridView = new DataGridView();
-            toolStripMenuItem1 = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             statusStrip1.SuspendLayout();
-            toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
+            toolStrip2.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -109,6 +109,12 @@
             menuExit.Text = "Вихід";
             menuExit.Click += menuExit_Click;
             // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(43, 20);
+            toolStripMenuItem1.Text = "Дані";
+            // 
             // пошукToolStripMenuItem
             // 
             пошукToolStripMenuItem.Name = "пошукToolStripMenuItem";
@@ -139,7 +145,7 @@
             // menuAbout
             // 
             menuAbout.Name = "menuAbout";
-            menuAbout.Size = new Size(180, 22);
+            menuAbout.Size = new Size(154, 22);
             menuAbout.Text = "Про програму";
             menuAbout.Click += menuAbout_Click;
             // 
@@ -160,8 +166,8 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(statusStrip1);
-            splitContainer1.Panel2.Controls.Add(toolStrip1);
             splitContainer1.Panel2.Controls.Add(dataGridView);
+            splitContainer1.Panel2.Controls.Add(toolStrip2);
             splitContainer1.Size = new Size(1008, 537);
             splitContainer1.SplitterDistance = 160;
             splitContainer1.TabIndex = 1;
@@ -233,14 +239,28 @@
             statusLabel.Size = new Size(45, 17);
             statusLabel.Text = "Готово";
             // 
-            // toolStrip1
+            // dataGridView
             // 
-            toolStrip1.Items.AddRange(new ToolStripItem[] { btnAdd, btnEdit, btnDelete, btnShowMap, toolStripLabel1, txtSearch, btnSearch });
-            toolStrip1.Location = new Point(0, 0);
-            toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(844, 25);
-            toolStrip1.TabIndex = 0;
-            toolStrip1.Text = "toolStrip1";
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.Location = new Point(0, 25);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.ReadOnly = true;
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.Size = new Size(844, 512);
+            dataGridView.TabIndex = 1;
+            // 
+            // toolStrip2
+            // 
+            toolStrip2.Items.AddRange(new ToolStripItem[] { btnAdd, btnEdit, btnDelete, btnShowMap, toolStripLabel1, txtSearch, btnSearch });
+            toolStrip2.Location = new Point(0, 0);
+            toolStrip2.Name = "toolStrip2";
+            toolStrip2.Size = new Size(844, 25);
+            toolStrip2.TabIndex = 1;
+            toolStrip2.Text = "toolStrip2";
             // 
             // btnAdd
             // 
@@ -299,26 +319,6 @@
             btnSearch.Text = "toolStripButton1";
             btnSearch.Click += btnSearch_Click;
             // 
-            // dataGridView
-            // 
-            dataGridView.AllowUserToAddRows = false;
-            dataGridView.AllowUserToDeleteRows = false;
-            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView.Dock = DockStyle.Fill;
-            dataGridView.Location = new Point(0, 0);
-            dataGridView.MultiSelect = false;
-            dataGridView.Name = "dataGridView";
-            dataGridView.ReadOnly = true;
-            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView.Size = new Size(844, 537);
-            dataGridView.TabIndex = 1;
-            // 
-            // toolStripMenuItem1
-            // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(43, 20);
-            toolStripMenuItem1.Text = "Дані";
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -338,9 +338,9 @@
             splitContainer1.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
-            toolStrip1.ResumeLayout(false);
-            toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
+            toolStrip2.ResumeLayout(false);
+            toolStrip2.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -358,7 +358,7 @@
         private Button btnCities;
         private Button btnRegions;
         private Button btnCountries;
-        private ToolStrip toolStrip1;
+        private ToolStrip toolStrip2;
         private ToolStripButton btnAdd;
         private ToolStripButton btnEdit;
         private ToolStripButton btnDelete;

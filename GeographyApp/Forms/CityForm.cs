@@ -29,6 +29,10 @@ namespace GeographyApp.Forms
             // При зміні країни оновлюємо список регіонів
             cmbCountry.SelectedIndexChanged += (s, e) => UpdateRegions();
             UpdateRegions();
+            
+            // За замовчуванням координати (0, 0)
+            txtLatitude.Text = "0";
+            txtLongitude.Text = "0";
         }
 
         /// Конструктор для редагування існуючого міста
@@ -37,6 +41,8 @@ namespace GeographyApp.Forms
         {
             txtName.Text = city.Name;
             txtPopulation.Text = city.Population.ToString();
+            txtLatitude.Text = city.Latitude.ToString("F4").Replace(".", ",");
+            txtLongitude.Text = city.Longitude.ToString("F4").Replace(".", ",");
             cmbCountry.SelectedItem = _countries
                 .FirstOrDefault(c => c.Name == city.Country.Name);
             cmbRegion.SelectedItem = _regions
@@ -66,8 +72,10 @@ namespace GeographyApp.Forms
                 long.Parse(txtPopulation.Text.Trim()),
                 (Region)cmbRegion.SelectedItem,
                 (Country)cmbCountry.SelectedItem,
-                double.Parse(txtLatitude.Text.Trim()),
-                double.Parse(txtLongitude.Text.Trim())
+                double.Parse(txtLatitude.Text.Trim().Replace(",", "."), 
+                    System.Globalization.CultureInfo.InvariantCulture),
+                double.Parse(txtLongitude.Text.Trim().Replace(",", "."), 
+                    System.Globalization.CultureInfo.InvariantCulture)
             );
 
             DialogResult = DialogResult.OK;
@@ -95,13 +103,15 @@ namespace GeographyApp.Forms
                 lblError.Text = "Населення - ціле невід'ємне число!";
                 return false;
             }
-            if (!double.TryParse(txtLatitude.Text.Trim(), out double lat) ||
+            if (!double.TryParse(txtLatitude.Text.Trim().Replace(",", "."), 
+                System.Globalization.CultureInfo.InvariantCulture, out double lat) ||
                 lat < -90 || lat > 90)
             {
                 lblError.Text = "Широта - число від -90 до 90!";
                 return false;
             }
-            if (!double.TryParse(txtLongitude.Text.Trim(), out double lon) ||
+            if (!double.TryParse(txtLongitude.Text.Trim().Replace(",", "."), 
+                System.Globalization.CultureInfo.InvariantCulture, out double lon) ||
                 lon < -180 || lon > 180)
             {
                 lblError.Text = "Довгота - число від -180 до 180!";

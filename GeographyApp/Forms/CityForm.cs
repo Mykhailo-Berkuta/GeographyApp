@@ -65,7 +65,9 @@ namespace GeographyApp.Forms
                 txtName.Text.Trim(),
                 long.Parse(txtPopulation.Text.Trim()),
                 (Region)cmbRegion.SelectedItem,
-                (Country)cmbCountry.SelectedItem
+                (Country)cmbCountry.SelectedItem,
+                double.Parse(txtLatitude.Text.Trim()),
+                double.Parse(txtLongitude.Text.Trim())
             );
 
             DialogResult = DialogResult.OK;

@@ -10,11 +10,17 @@ namespace GeographyApp.Models
 
         public Country Country { get; set; }
 
-        public City(string name, long population, Region region, Country country)
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
+        public City(string name, long population, Region region, Country country, double latitude = 0, double longitude = 0)
             : base(name, population)
         {
             Region = region;
             Country = country;
+            Latitude = latitude;
+            Longitude = longitude;
         }
     }
 }

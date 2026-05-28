@@ -42,8 +42,8 @@ namespace GeographyApp.Services
             Regions.AddRange(new[] { kharkivRegion, kyivRegion });
 
             // Міста
-            var kharkiv = new City("Харків", 1_433_000, kharkivRegion, ukraine);
-            var kyiv = new City("Київ", 2_962_000, kyivRegion, ukraine);
+            var kharkiv = new City("Харків", 1_433_000, kharkivRegion, ukraine, 50.0039, 36.2304);
+            var kyiv = new City("Київ", 2_962_000, kyivRegion, ukraine, 50.4501, 30.5234);
             Cities.AddRange(new[] { kharkiv, kyiv });
         }
 
@@ -75,7 +75,9 @@ namespace GeographyApp.Services
                     Name = c.Name,
                     Population = c.Population,
                     RegionName = c.Region.Name,
-                    CountryName = c.Country.Name
+                    CountryName = c.Country.Name,
+                    Latitude = c.Latitude,
+                    Longitude = c.Longitude
                 }).ToList()
             };
 
@@ -107,19 +109,23 @@ namespace GeographyApp.Services
 
             Countries = data.Countries.Select(d => new Country(
                 d.Name, d.Population, d.Area, d.GovernmentForm, d.Capital,
-                Continents.First(c => c.Name == d.ContinentName)
-            )).ToList();
+                Continents.First(c => c.Name == d.ContinentName) ?? throw new InvalidOperationException($"Continent '{d.ContinentName}' not found")
+            )).Where(c => c.Continent != null).ToList();
 
-            Regions = data.Regions.Select(d => new Region(
-                d.Name, d.Population, d.RegionType, d.Capital,
-                Countries.First(c => c.Name == d.CountryName)
-            )).ToList();
+            Regions = data.Regions.Select(d =>
+            {
+                var country = Countries.FirstOrDefault(c => c.Name == d.CountryName);
+                if (country == null) return null;
+                return new Region(d.Name, d.Population, d.RegionType, d.Capital, country);
+            }).Where(r => r != null).ToList();
 
-            Cities = data.Cities.Select(d => new City(
-                d.Name, d.Population,
-                Regions.First(r => r.Name == d.RegionName),
-                Countries.First(c => c.Name == d.CountryName)
-            )).ToList();
+            Cities = data.Cities.Select(d =>
+            {
+                var region = Regions.FirstOrDefault(r => r.Name == d.RegionName);
+                var country = Countries.FirstOrDefault(c => c.Name == d.CountryName);
+                if (region == null || country == null) return null;
+                return new City(d.Name, d.Population, region, country, d.Latitude, d.Longitude);
+            }).Where(c => c != null).ToList();
         }
 
         // DTO класи для серіалізації
@@ -156,6 +162,8 @@ namespace GeographyApp.Services
             public long Population { get; set; }
             public string RegionName { get; set; }
             public string CountryName { get; set; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
         }
     }
 }

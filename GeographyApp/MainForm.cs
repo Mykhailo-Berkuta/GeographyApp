@@ -76,6 +76,8 @@ namespace GeographyApp
                     Країна = c.Country.Name,
                     Регіон = c.Region.Name,
                     Населення = c.Population.ToString("N0"),
+                    Широта = c.Latitude.ToString("F4"),
+                    Довгота = c.Longitude.ToString("F4")
                 }).ToList();
             statusLabel.Text = $"Міста: {_dataManager.Cities.Count} записів";
         }
@@ -202,16 +204,58 @@ namespace GeographyApp
 
             if (dataGridView.Tag?.ToString() == "continents")
             {
+                var continent = _dataManager.Continents[index];
+                var dependentCountries = _dataManager.Countries
+                    .Count(c => c.Continent.Name == continent.Name);
+                
+                if (dependentCountries > 0)
+                {
+                    MessageBox.Show(
+                        $"Неможливо видалити материк. Існує {dependentCountries} країн(и), " +
+                        "що належать цьому материку. Спочатку видаліть їх.",
+                        "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                
                 _dataManager.Continents.RemoveAt(index);
                 ShowContinents();
             }
             else if (dataGridView.Tag?.ToString() == "countries")
             {
+                var country = _dataManager.Countries[index];
+                var dependentRegions = _dataManager.Regions
+                    .Count(r => r.Country.Name == country.Name);
+                var dependentCities = _dataManager.Cities
+                    .Count(c => c.Country.Name == country.Name);
+                
+                if (dependentRegions > 0 || dependentCities > 0)
+                {
+                    MessageBox.Show(
+                        $"Неможливо видалити країну. Існує {dependentRegions} регіон(ів) та " +
+                        $"{dependentCities} місто(міст), що належать цій країні. " +
+                        "Спочатку видаліть їх.",
+                        "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                
                 _dataManager.Countries.RemoveAt(index);
                 ShowCountries();
             }
             else if (dataGridView.Tag?.ToString() == "regions")
             {
+                var region = _dataManager.Regions[index];
+                var dependentCities = _dataManager.Cities
+                    .Count(c => c.Region.Name == region.Name);
+                
+                if (dependentCities > 0)
+                {
+                    MessageBox.Show(
+                        $"Неможливо видалити регіон. Існує {dependentCities} місто(міст), " +
+                        "що належать цьому регіону. Спочатку видаліть їх.",
+                        "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                
                 _dataManager.Regions.RemoveAt(index);
                 ShowRegions();
             }
@@ -293,6 +337,8 @@ namespace GeographyApp
                         Країна = c.Country.Name,
                         Регіон = c.Region.Name,
                         Населення = c.Population.ToString("N0"),
+                        Широта = c.Latitude.ToString("F4"),
+                        Довгота = c.Longitude.ToString("F4")
                     }).ToList();
             }
 

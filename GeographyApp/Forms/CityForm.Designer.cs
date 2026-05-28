@@ -32,9 +32,13 @@
             btnCancel = new Button();
             btnOk = new Button();
             txtPopulation = new TextBox();
+            txtLatitude = new TextBox();
+            txtLongitude = new TextBox();
             lblError = new Label();
             label5 = new Label();
             label2 = new Label();
+            label3 = new Label();
+            label4 = new Label();
             txtName = new TextBox();
             label1 = new Label();
             cmbRegion = new ComboBox();
@@ -52,7 +56,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(187, 186);
+            btnCancel.Location = new Point(187, 220);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(100, 30);
             btnCancel.TabIndex = 42;
@@ -62,7 +66,7 @@
             // 
             // btnOk
             // 
-            btnOk.Location = new Point(72, 186);
+            btnOk.Location = new Point(72, 220);
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(100, 30);
             btnOk.TabIndex = 41;
@@ -77,10 +81,24 @@
             txtPopulation.Size = new Size(180, 23);
             txtPopulation.TabIndex = 38;
             // 
+            // txtLatitude
+            // 
+            txtLatitude.Location = new Point(139, 178);
+            txtLatitude.Name = "txtLatitude";
+            txtLatitude.Size = new Size(180, 23);
+            txtLatitude.TabIndex = 46;
+            // 
+            // txtLongitude
+            // 
+            txtLongitude.Location = new Point(139, 207);
+            txtLongitude.Name = "txtLongitude";
+            txtLongitude.Size = new Size(180, 23);
+            txtLongitude.TabIndex = 47;
+            // 
             // lblError
             // 
             lblError.ForeColor = Color.DarkRed;
-            lblError.Location = new Point(13, 223);
+            lblError.Location = new Point(13, 257);
             lblError.Name = "lblError";
             lblError.Size = new Size(320, 20);
             lblError.TabIndex = 37;
@@ -103,6 +121,24 @@
             label2.TabIndex = 33;
             label2.Text = "Населення:";
             label2.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label3
+            // 
+            label3.Location = new Point(13, 178);
+            label3.Name = "label3";
+            label3.Size = new Size(100, 23);
+            label3.TabIndex = 48;
+            label3.Text = "Широта:";
+            label3.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label4
+            // 
+            label4.Location = new Point(13, 207);
+            label4.Name = "label4";
+            label4.Size = new Size(100, 23);
+            label4.TabIndex = 49;
+            label4.Text = "Довгота:";
+            label4.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtName
             // 
@@ -142,7 +178,11 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(364, 273);
+            ClientSize = new Size(364, 307);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(txtLongitude);
+            Controls.Add(txtLatitude);
             Controls.Add(cmbRegion);
             Controls.Add(label6);
             Controls.Add(cmbCountry);

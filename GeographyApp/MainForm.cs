@@ -21,6 +21,9 @@ namespace GeographyApp
             dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
             dataGridView.EnableHeadersVisualStyles = false;
             dataGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(210, 210, 210);
+            // Ensure dropdown sort menu items trigger sorting even if their Click handlers
+            // are not invoked for some reason (forward to existing handlers).
+            btnSort.DropDownItemClicked += BtnSort_DropDownItemClicked;
         }
 
         // Навігаційні кнопки 
@@ -619,6 +622,30 @@ namespace GeographyApp
                         statusLabel.Text = $"Міста: {filtered.Count} записів";
                     }
                     break;
+            }
+        }
+
+        private void BtnSort_DropDownItemClicked(object? sender, ToolStripItemClickedEventArgs e)
+        {
+            try
+            {
+                var text = e.ClickedItem?.Text ?? string.Empty;
+                if (text == "За назвою")
+                {
+                    btnSortByName_Click(sender, EventArgs.Empty);
+                }
+                else if (text == "За населенням")
+                {
+                    btnSortByPopulation_Click(sender, EventArgs.Empty);
+                }
+                else if (text == "За площею")
+                {
+                    btnSortByArea_Click(sender, EventArgs.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Помилка при сортуванні: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

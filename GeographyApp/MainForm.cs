@@ -215,7 +215,7 @@ namespace GeographyApp
                 var continent = _dataManager.Continents[index];
                 var dependentCountries = _dataManager.Countries
                     .Count(c => c.Continent.Name == continent.Name);
-                
+
                 if (dependentCountries > 0)
                 {
                     MessageBox.Show(
@@ -224,7 +224,7 @@ namespace GeographyApp
                         "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                
+
                 _dataManager.Continents.RemoveAt(index);
                 ShowContinents();
             }
@@ -235,7 +235,7 @@ namespace GeographyApp
                     .Count(r => r.Country.Name == country.Name);
                 var dependentCities = _dataManager.Cities
                     .Count(c => c.Country.Name == country.Name);
-                
+
                 if (dependentRegions > 0 || dependentCities > 0)
                 {
                     MessageBox.Show(
@@ -245,7 +245,7 @@ namespace GeographyApp
                         "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                
+
                 _dataManager.Countries.RemoveAt(index);
                 ShowCountries();
             }
@@ -254,7 +254,7 @@ namespace GeographyApp
                 var region = _dataManager.Regions[index];
                 var dependentCities = _dataManager.Cities
                     .Count(c => c.Region.Name == region.Name);
-                
+
                 if (dependentCities > 0)
                 {
                     MessageBox.Show(
@@ -263,7 +263,7 @@ namespace GeographyApp
                         "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                
+
                 _dataManager.Regions.RemoveAt(index);
                 ShowRegions();
             }
@@ -484,5 +484,64 @@ namespace GeographyApp
             }
         }
 
+        private void btnSortByName_Click(object sender, EventArgs e)
+        {
+            var comparer = new GeographicObjectComparer(GeographicObjectComparer.SortBy.Name);
+            SortCurrentView(comparer, CountryComparer.SortBy.Name);
+        }
+
+        private void btnSortByPopulation_Click(object sender, EventArgs e)
+        {
+            var comparer = new GeographicObjectComparer(GeographicObjectComparer.SortBy.Population);
+            SortCurrentView(comparer, CountryComparer.SortBy.Population);
+        }
+
+        private void btnSortByArea_Click(object sender, EventArgs e)
+        {
+            var tag = dataGridView.Tag?.ToString();
+
+            if (tag == "continents")
+            {
+                _dataManager.Continents.Sort(
+                    Comparer<Continent>.Create((a, b) => a.Area.CompareTo(b.Area)));
+                ShowContinents();
+            }
+            else if (tag == "countries")
+            {
+                _dataManager.Countries.Sort(new CountryComparer(CountryComparer.SortBy.Area));
+                ShowCountries();
+            }
+            else
+            {
+                MessageBox.Show("Сортування за площею доступне лише для материків і країн.",
+                    "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void SortCurrentView(GeographicObjectComparer comparer, CountryComparer.SortBy countrySortBy)
+        {
+            switch (dataGridView.Tag?.ToString())
+            {
+                case "continents":
+                    _dataManager.Continents.Sort(comparer);
+                    ShowContinents();
+                    break;
+
+                case "countries":
+                    _dataManager.Countries.Sort(new CountryComparer(countrySortBy));
+                    ShowCountries();
+                    break;
+
+                case "regions":
+                    _dataManager.Regions.Sort(comparer);
+                    ShowRegions();
+                    break;
+
+                case "cities":
+                    _dataManager.Cities.Sort(comparer);
+                    ShowCities();
+                    break;
+            }
+        }
     }
 }

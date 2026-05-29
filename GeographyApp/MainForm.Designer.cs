@@ -51,6 +51,10 @@
             statusLabel = new ToolStripStatusLabel();
             dataGridView = new DataGridView();
             toolStrip2 = new ToolStrip();
+            btnSort = new ToolStripDropDownButton();
+            заНазвоюToolStripMenuItem = new ToolStripMenuItem();
+            заНаселеннямToolStripMenuItem = new ToolStripMenuItem();
+            заПлощеюToolStripMenuItem = new ToolStripMenuItem();
             btnAdd = new ToolStripButton();
             btnEdit = new ToolStripButton();
             btnDelete = new ToolStripButton();
@@ -266,12 +270,44 @@
             // 
             // toolStrip2
             // 
-            toolStrip2.Items.AddRange(new ToolStripItem[] { btnAdd, btnEdit, btnDelete, btnShowMap, txtSearch, btnSearch });
+            toolStrip2.Items.AddRange(new ToolStripItem[] { btnSort, btnAdd, btnEdit, btnDelete, btnShowMap, txtSearch, btnSearch });
             toolStrip2.Location = new Point(0, 0);
             toolStrip2.Name = "toolStrip2";
             toolStrip2.Size = new Size(844, 25);
             toolStrip2.TabIndex = 1;
             toolStrip2.Text = "toolStrip2";
+            // 
+            // btnSort
+            // 
+            btnSort.BackColor = SystemColors.MenuBar;
+            btnSort.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnSort.DropDownItems.AddRange(new ToolStripItem[] { заНазвоюToolStripMenuItem, заНаселеннямToolStripMenuItem, заПлощеюToolStripMenuItem });
+            btnSort.Image = (Image)resources.GetObject("btnSort.Image");
+            btnSort.ImageTransparentColor = Color.Magenta;
+            btnSort.Name = "btnSort";
+            btnSort.Size = new Size(29, 22);
+            btnSort.Text = "Сортування";
+            // 
+            // заНазвоюToolStripMenuItem
+            // 
+            заНазвоюToolStripMenuItem.Name = "заНазвоюToolStripMenuItem";
+            заНазвоюToolStripMenuItem.Size = new Size(180, 22);
+            заНазвоюToolStripMenuItem.Text = "За назвою";
+            заНазвоюToolStripMenuItem.Click += btnSortByName_Click;
+            // 
+            // заНаселеннямToolStripMenuItem
+            // 
+            заНаселеннямToolStripMenuItem.Name = "заНаселеннямToolStripMenuItem";
+            заНаселеннямToolStripMenuItem.Size = new Size(180, 22);
+            заНаселеннямToolStripMenuItem.Text = "За населенням";
+            заНаселеннямToolStripMenuItem.Click += btnSortByPopulation_Click;
+            // 
+            // заПлощеюToolStripMenuItem
+            // 
+            заПлощеюToolStripMenuItem.Name = "заПлощеюToolStripMenuItem";
+            заПлощеюToolStripMenuItem.Size = new Size(180, 22);
+            заПлощеюToolStripMenuItem.Text = "За площею";
+            заПлощеюToolStripMenuItem.Click += btnSortByArea_Click;
             // 
             // btnAdd
             // 
@@ -382,5 +418,9 @@
         private ToolStripMenuItem статистикаНаселенняToolStripMenuItem;
         private ToolStripMenuItem menuAbout;
         private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripDropDownButton btnSort;
+        private ToolStripMenuItem заНазвоюToolStripMenuItem;
+        private ToolStripMenuItem заНаселеннямToolStripMenuItem;
+        private ToolStripMenuItem заПлощеюToolStripMenuItem;
     }
 }

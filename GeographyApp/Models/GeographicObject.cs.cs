@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GeographyApp.Models
 {
-    public abstract class GeographicObject
+    public abstract class GeographicObject : IComparable<GeographicObject>
     {
         public string Name { get; set; }
 
@@ -17,5 +17,11 @@ namespace GeographyApp.Models
         }
 
         public override string ToString() => Name;
+
+        public int CompareTo(GeographicObject? other)
+        {
+            if (other == null) return 1;
+            return string.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

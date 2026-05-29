@@ -16,7 +16,30 @@ namespace GeographyApp
         public MainForm()
         {
             InitializeComponent();
-            _dataManager.Load();
+
+            try
+            {
+                _dataManager.Load();
+            }
+            catch (Exception ex)
+            {
+                // Некритична помилка завантаження — показуємо дружнє повідомлення і завантажуємо тестові дані
+                MessageBox.Show("Не вдалося завантажити дані з файлу. Буде завантажено тестові дані.\n\nДеталі: " + ex.Message,
+                    "Помилка завантаження", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                try
+                {
+                    _dataManager.LoadSampleData();
+                }
+                catch
+                {
+                    // Якщо і тестові дані не завантажуються — очистимо існуючі колекції
+                    _dataManager.Continents.Clear();
+                    _dataManager.Countries.Clear();
+                    _dataManager.Regions.Clear();
+                    _dataManager.Cities.Clear();
+                }
+            }
+
             ShowContinents();
             KeyDown += MainForm_KeyDown;
             txtSearch.KeyPress += TxtSearch_KeyPress;
@@ -30,6 +53,27 @@ namespace GeographyApp
             
             // Додаємо обробник подвійного клику для фільтрації по батьківському об'єкту
             dataGridView.DoubleClick += DataGridView_DoubleClick;
+        }
+
+        // Helper: safely get cell value by column header name
+        private string? GetSelectedCellValue(string columnName)
+        {
+            try
+            {
+                if (dataGridView.CurrentRow == null) return null;
+                var cell = dataGridView.CurrentRow.Cells[columnName];
+                return cell?.Value?.ToString();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        // Helper: find index in list by name (case-insensitive)
+        private int FindIndexByName<T>(System.Collections.Generic.List<T> list, string name) where T : GeographicObject
+        {
+            return list.FindIndex(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         // Навігаційні кнопки 
@@ -210,124 +254,227 @@ namespace GeographyApp
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if (dataGridView.CurrentRow == null) return;
-            int index = dataGridView.CurrentRow.Index;
+            try
+            {
+                if (dataGridView.CurrentRow == null)
+                {
+                    MessageBox.Show("Будь ласка, виберіть запис для редагування.", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
 
-            if (dataGridView.Tag?.ToString() == "continents")
-            {
-                var continent = _dataManager.Continents[index];
-                using var form = new Forms.ContinentForm(continent);
-                if (form.ShowDialog(this) == DialogResult.OK)
+                var tag = dataGridView.Tag?.ToString();
+                var name = GetSelectedCellValue("Назва");
+                if (string.IsNullOrEmpty(name))
                 {
-                    _dataManager.Continents[index] = form.Result;
-                    ShowContinents();
+                    MessageBox.Show("Не вдалося отримати назву вибраного запису.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (tag == "continents")
+                {
+                    int idx = FindIndexByName(_dataManager.Continents, name);
+                    if (idx < 0)
+                    {
+                        MessageBox.Show("Вибраний материк не знайдено.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    var continent = _dataManager.Continents[idx];
+                    using var form = new Forms.ContinentForm(continent);
+                    if (form.ShowDialog(this) == DialogResult.OK)
+                    {
+                        _dataManager.Continents[idx] = form.Result;
+                        ShowContinents();
+                    }
+                }
+                else if (tag == "countries")
+                {
+                    int idx = FindIndexByName(_dataManager.Countries, name);
+                    if (idx < 0)
+                    {
+                        MessageBox.Show("Вибрану країну не знайдено.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    var country = _dataManager.Countries[idx];
+                    using var form = new Forms.CountryForm(_dataManager.Continents, country);
+                    if (form.ShowDialog(this) == DialogResult.OK)
+                    {
+                        _dataManager.Countries[idx] = form.Result;
+                        ShowCountries();
+                    }
+                }
+                else if (tag == "regions")
+                {
+                    int idx = FindIndexByName(_dataManager.Regions, name);
+                    if (idx < 0)
+                    {
+                        MessageBox.Show("Вибраний регіон не знайдено.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    var region = _dataManager.Regions[idx];
+                    using var form = new Forms.RegionForm(_dataManager.Countries, region);
+                    if (form.ShowDialog(this) == DialogResult.OK)
+                    {
+                        _dataManager.Regions[idx] = form.Result;
+                        ShowRegions();
+                    }
+                }
+                else if (tag == "cities")
+                {
+                    int idx = FindIndexByName(_dataManager.Cities, name);
+                    if (idx < 0)
+                    {
+                        MessageBox.Show("Вибране місто не знайдено.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    var city = _dataManager.Cities[idx];
+                    using var form = new Forms.CityForm(_dataManager.Countries, _dataManager.Regions, city);
+                    if (form.ShowDialog(this) == DialogResult.OK)
+                    {
+                        _dataManager.Cities[idx] = form.Result;
+                        ShowCities();
+                    }
                 }
             }
-            else if (dataGridView.Tag?.ToString() == "countries")
+            catch (Exception ex)
             {
-                var country = _dataManager.Countries[index];
-                using var form = new Forms.CountryForm(_dataManager.Continents, country);
-                if (form.ShowDialog(this) == DialogResult.OK)
-                {
-                    _dataManager.Countries[index] = form.Result;
-                    ShowCountries();
-                }
-            }
-            else if (dataGridView.Tag?.ToString() == "regions")
-            {
-                var region = _dataManager.Regions[index];
-                using var form = new Forms.RegionForm(_dataManager.Countries, region);
-                if (form.ShowDialog(this) == DialogResult.OK)
-                {
-                    _dataManager.Regions[index] = form.Result;
-                    ShowRegions();
-                }
-            }
-            else if (dataGridView.Tag?.ToString() == "cities")
-            {
-                var city = _dataManager.Cities[index];
-                using var form = new Forms.CityForm(
-                    _dataManager.Countries, _dataManager.Regions, city);
-                if (form.ShowDialog(this) == DialogResult.OK)
-                {
-                    _dataManager.Cities[index] = form.Result;
-                    ShowCities();
-                }
+                MessageBox.Show($"Сталася помилка при редагуванні: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (dataGridView.CurrentRow == null) return;
-            int index = dataGridView.CurrentRow.Index;
-
-            var confirm = MessageBox.Show(
-                "Ви впевнені що хочете видалити цей запис?",
-                "Підтвердження", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (confirm != DialogResult.Yes) return;
-
-            if (dataGridView.Tag?.ToString() == "continents")
+            try
             {
-                var continent = _dataManager.Continents[index];
-                var dependentCountries = _dataManager.Countries
-                    .Count(c => c.Continent.Name == continent.Name);
-
-                if (dependentCountries > 0)
+                if (dataGridView.CurrentRow == null)
                 {
-                    MessageBox.Show(
-                        $"Неможливо видалити материк. Існує {dependentCountries} країн(и), " +
-                        "що належать цьому материку. Спочатку видаліть їх.",
-                        "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Будь ласка, виберіть запис для видалення.", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                _dataManager.Continents.RemoveAt(index);
-                ShowContinents();
-            }
-            else if (dataGridView.Tag?.ToString() == "countries")
-            {
-                var country = _dataManager.Countries[index];
-                var dependentRegions = _dataManager.Regions
-                    .Count(r => r.Country.Name == country.Name);
-                var dependentCities = _dataManager.Cities
-                    .Count(c => c.Country.Name == country.Name);
-
-                if (dependentRegions > 0 || dependentCities > 0)
+                var name = GetSelectedCellValue("Назва");
+                if (string.IsNullOrEmpty(name))
                 {
-                    MessageBox.Show(
-                        $"Неможливо видалити країну. Існує {dependentRegions} регіон(ів) та " +
-                        $"{dependentCities} місто(міст), що належать цій країні. " +
-                        "Спочатку видаліть їх.",
-                        "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Не вдалося визначити вибраний запис.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                _dataManager.Countries.RemoveAt(index);
-                ShowCountries();
-            }
-            else if (dataGridView.Tag?.ToString() == "regions")
-            {
-                var region = _dataManager.Regions[index];
-                var dependentCities = _dataManager.Cities
-                    .Count(c => c.Region.Name == region.Name);
+                var confirm = MessageBox.Show(
+                    "Ви впевнені, що хочете видалити цей запис? Ця дія необоротна.",
+                    "Підтвердження видалення", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                if (dependentCities > 0)
+                if (confirm != DialogResult.Yes) return;
+
+                var tag = dataGridView.Tag?.ToString();
+                if (tag == "continents")
                 {
-                    MessageBox.Show(
-                        $"Неможливо видалити регіон. Існує {dependentCities} місто(міст), " +
-                        "що належать цьому регіону. Спочатку видаліть їх.",
-                        "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    int idx = FindIndexByName(_dataManager.Continents, name);
+                    if (idx < 0) { MessageBox.Show("Материк не знайдено.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+                    var dependentCountries = _dataManager.Countries.Count(c => c.Continent.Name == name);
+                    if (dependentCountries > 0)
+                    {
+                        MessageBox.Show($"Неможливо видалити материк. Існує {dependentCountries} країн(и), що належать цьому материку. Спочатку видаліть їх.",
+                            "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    _dataManager.Continents.RemoveAt(idx);
+                    ShowContinents();
+                }
+                else if (tag == "countries")
+                {
+                    int idx = FindIndexByName(_dataManager.Countries, name);
+                    if (idx < 0) { MessageBox.Show("Країну не знайдено.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+                    var dependentRegions = _dataManager.Regions.Count(r => r.Country.Name == name);
+                    var dependentCities = _dataManager.Cities.Count(c => c.Country.Name == name);
+                    if (dependentRegions > 0 || dependentCities > 0)
+                    {
+                        MessageBox.Show($"Неможливо видалити країну. Існує {dependentRegions} регіон(ів) та {dependentCities} міст(а), що належать цій країні. Спочатку видаліть їх.",
+                            "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    _dataManager.Countries.RemoveAt(idx);
+                    ShowCountries();
+                }
+                else if (tag == "regions")
+                {
+                    int idx = FindIndexByName(_dataManager.Regions, name);
+                    if (idx < 0) { MessageBox.Show("Регіон не знайдено.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+                    var dependentCities = _dataManager.Cities.Count(c => c.Region.Name == name);
+                    if (dependentCities > 0)
+                    {
+                        MessageBox.Show($"Неможливо видалити регіон. Існує {dependentCities} міст(а), що належать цьому регіону. Спочатку видаліть їх.",
+                            "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    _dataManager.Regions.RemoveAt(idx);
+                    ShowRegions();
+                }
+                else if (tag == "cities")
+                {
+                    int idx = FindIndexByName(_dataManager.Cities, name);
+                    if (idx < 0) { MessageBox.Show("Місто не знайдено.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+                    _dataManager.Cities.RemoveAt(idx);
+                    ShowCities();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Сталася помилка при видаленні: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnShowMap_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridView.CurrentRow == null)
+                {
+                    MessageBox.Show("Виберіть запис у таблиці.", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                _dataManager.Regions.RemoveAt(index);
-                ShowRegions();
+                var tag = dataGridView.Tag?.ToString();
+                var name = GetSelectedCellValue("Назва");
+                if (string.IsNullOrEmpty(name))
+                {
+                    MessageBox.Show("Не вдалося визначити назву об'єкту для карти.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string query = string.Empty;
+                if (tag == "continents")
+                {
+                    query = name;
+                }
+                else if (tag == "countries")
+                {
+                    query = name;
+                }
+                else if (tag == "regions")
+                {
+                    var region = _dataManager.Regions.FirstOrDefault(r => string.Equals(r.Name, name, StringComparison.CurrentCultureIgnoreCase));
+                    if (region == null) { MessageBox.Show("Регіон не знайдено.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+                    query = $"{region.Name}, {region.Country.Name}";
+                }
+                else if (tag == "cities")
+                {
+                    var city = _dataManager.Cities.FirstOrDefault(c => string.Equals(c.Name, name, StringComparison.CurrentCultureIgnoreCase));
+                    if (city == null) { MessageBox.Show("Місто не знайдено.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+                    query = $"{city.Name}, {city.Country.Name}";
+                }
+
+                if (string.IsNullOrEmpty(query))
+                {
+                    MessageBox.Show("Неможливо відкрити карту для цього запису.", "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                string url = $"https://www.google.com/maps/search/{Uri.EscapeDataString(query)}";
+                using var mapForm = new Forms.MapForm(url, query);
+                mapForm.ShowDialog(this);
             }
-            else if (dataGridView.Tag?.ToString() == "cities")
+            catch (Exception ex)
             {
-                _dataManager.Cities.RemoveAt(index);
-                ShowCities();
+                MessageBox.Show($"Не вдалося відкрити карту: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -335,7 +482,14 @@ namespace GeographyApp
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
-            _dataManager.Save();
+            try
+            {
+                _dataManager.Save();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не вдалося зберегти дані: {ex.Message}", "Помилка збереження", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -430,57 +584,31 @@ namespace GeographyApp
             }
         }
 
-        private void btnShowMap_Click(object sender, EventArgs e)
-        {
-            if (dataGridView.CurrentRow == null)
-            {
-                MessageBox.Show("Виділіть запис у таблиці.",
-                    "Увага", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            int index = dataGridView.CurrentRow.Index;
-            string query = "";
-
-            if (dataGridView.Tag?.ToString() == "continents")
-            {
-                var continent = _dataManager.Continents[index];
-                query = continent.Name;
-            }
-            else if (dataGridView.Tag?.ToString() == "countries")
-            {
-                var country = _dataManager.Countries[index];
-                query = country.Name;
-            }
-            else if (dataGridView.Tag?.ToString() == "regions")
-            {
-                var region = _dataManager.Regions[index];
-                query = $"{region.Name}, {region.Country.Name}";
-            }
-            else if (dataGridView.Tag?.ToString() == "cities")
-            {
-                var city = _dataManager.Cities[index];
-                query = $"{city.Name}, {city.Country.Name}";
-            }
-
-            string url = $"https://www.google.com/maps/search/{Uri.EscapeDataString(query)}";
-            using var mapForm = new Forms.MapForm(url, query);
-            mapForm.ShowDialog(this);
-        }
-
         private void menuSave_Click(object sender, EventArgs e)
         {
-            _dataManager.Save();
-            MessageBox.Show("Дані збережено!", "Збереження",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                _dataManager.Save();
+                MessageBox.Show("Дані збережено!", "Збереження", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не вдалося зберегти дані: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void menuLoad_Click(object sender, EventArgs e)
         {
-            _dataManager.Load();
-            RefreshCurrentView();
-            MessageBox.Show("Дані завантажено!", "Завантаження",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                _dataManager.Load();
+                RefreshCurrentView();
+                MessageBox.Show("Дані завантажено!", "Завантаження", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не вдалося завантажити дані: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void menuExit_Click(object sender, EventArgs e)

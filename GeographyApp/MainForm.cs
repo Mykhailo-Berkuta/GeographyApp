@@ -407,11 +407,8 @@ namespace GeographyApp
             }
 
             string url = $"https://www.google.com/maps/search/{Uri.EscapeDataString(query)}";
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-            {
-                FileName = url,
-                UseShellExecute = true
-            });
+            using var mapForm = new Forms.MapForm(url, query);
+            mapForm.ShowDialog(this);
         }
 
         private void menuSave_Click(object sender, EventArgs e)

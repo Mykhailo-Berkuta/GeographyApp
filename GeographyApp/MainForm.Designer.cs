@@ -248,6 +248,8 @@
             // 
             dataGridView.AllowUserToAddRows = false;
             dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AllowUserToResizeColumns = false;
+            dataGridView.AllowUserToResizeRows = false;
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = SystemColors.ActiveBorder;
@@ -291,21 +293,21 @@
             // заНазвоюToolStripMenuItem
             // 
             заНазвоюToolStripMenuItem.Name = "заНазвоюToolStripMenuItem";
-            заНазвоюToolStripMenuItem.Size = new Size(180, 22);
+            заНазвоюToolStripMenuItem.Size = new Size(157, 22);
             заНазвоюToolStripMenuItem.Text = "За назвою";
             заНазвоюToolStripMenuItem.Click += btnSortByName_Click;
             // 
             // заНаселеннямToolStripMenuItem
             // 
             заНаселеннямToolStripMenuItem.Name = "заНаселеннямToolStripMenuItem";
-            заНаселеннямToolStripMenuItem.Size = new Size(180, 22);
+            заНаселеннямToolStripMenuItem.Size = new Size(157, 22);
             заНаселеннямToolStripMenuItem.Text = "За населенням";
             заНаселеннямToolStripMenuItem.Click += btnSortByPopulation_Click;
             // 
             // заПлощеюToolStripMenuItem
             // 
             заПлощеюToolStripMenuItem.Name = "заПлощеюToolStripMenuItem";
-            заПлощеюToolStripMenuItem.Size = new Size(180, 22);
+            заПлощеюToolStripMenuItem.Size = new Size(157, 22);
             заПлощеюToolStripMenuItem.Text = "За площею";
             заПлощеюToolStripMenuItem.Click += btnSortByArea_Click;
             // 

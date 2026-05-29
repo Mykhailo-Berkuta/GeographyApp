@@ -354,6 +354,7 @@
             пошукToolStripMenuItem.Name = "пошукToolStripMenuItem";
             пошукToolStripMenuItem.Size = new Size(58, 20);
             пошукToolStripMenuItem.Text = "Пошук";
+            пошукToolStripMenuItem.Click += пошукToolStripMenuItem_Click;
             // 
             // MainForm
             // 

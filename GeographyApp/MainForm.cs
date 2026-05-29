@@ -488,6 +488,13 @@ namespace GeographyApp
             Application.Exit();
         }
 
+        private void пошукToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Встановлюємо фокус на поле пошуку
+            txtSearch.Focus();
+            txtSearch.SelectAll();
+        }
+
         private void menuStats_Click(object sender, EventArgs e)
         {
             var stats = _dataManager.Continents

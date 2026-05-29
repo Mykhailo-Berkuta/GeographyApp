@@ -56,7 +56,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(187, 220);
+            btnCancel.Location = new Point(192, 258);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(100, 30);
             btnCancel.TabIndex = 42;
@@ -66,7 +66,7 @@
             // 
             // btnOk
             // 
-            btnOk.Location = new Point(72, 220);
+            btnOk.Location = new Point(77, 258);
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(100, 30);
             btnOk.TabIndex = 41;
@@ -98,7 +98,7 @@
             // lblError
             // 
             lblError.ForeColor = Color.DarkRed;
-            lblError.Location = new Point(13, 257);
+            lblError.Location = new Point(18, 295);
             lblError.Name = "lblError";
             lblError.Size = new Size(320, 20);
             lblError.TabIndex = 37;
@@ -176,9 +176,11 @@
             // 
             // CityForm
             // 
+            AcceptButton = btnOk;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(364, 307);
+            CancelButton = btnCancel;
+            ClientSize = new Size(364, 327);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(txtLongitude);
@@ -195,6 +197,7 @@
             Controls.Add(txtName);
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            KeyPreview = true;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "CityForm";

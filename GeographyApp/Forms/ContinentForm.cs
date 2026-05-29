@@ -13,9 +13,11 @@ namespace GeographyApp.Forms
     {
         public Continent Result { get; private set; }
 
+
         public ContinentForm()
         {
             InitializeComponent();
+            KeyDown += Form_KeyDown;
         }
 
         /// Конструктор для редагування існуючого материка
@@ -72,6 +74,21 @@ namespace GeographyApp.Forms
             }
 
             return true;
+        }
+
+        private void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1)
+            {
+                MessageBox.Show(
+                    "Форма додавання/редагування материка.\n\n" +
+                    "Назва - довільний текст\n" +
+                    "Населення - ціле невід'ємне число\n" +
+                    "Площа (км²) - додатне число\n\n" +
+                    "Enter - зберегти, Esc - скасувати.",
+                    "Довідка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                e.Handled = true;
+            }
         }
     }
 }

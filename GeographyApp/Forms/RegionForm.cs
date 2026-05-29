@@ -22,6 +22,7 @@ namespace GeographyApp.Forms
             _countries = countries;
             cmbCountry.DataSource = _countries;
             cmbCountry.DisplayMember = "Name";
+            KeyDown += Form_KeyDown;
         }
 
         /// Конструктор для редагування існуючого регіону
@@ -91,6 +92,23 @@ namespace GeographyApp.Forms
             }
 
             return true;
+        }
+
+        private void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1)
+            {
+                MessageBox.Show(
+                    "Форма додавання/редагування регіону.\n\n" +
+                    "Назва - довільний текст\n" +
+                    "Населення - ціле невід'ємне число\n" +
+                    "Тип регіону - наприклад: область, штат\n" +
+                    "Адм. центр - довільний текст\n" +
+                    "Країна - оберіть зі списку\n\n" +
+                    "Enter - зберегти, Esc - скасувати.",
+                    "Довідка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                e.Handled = true;
+            }
         }
     }
 }

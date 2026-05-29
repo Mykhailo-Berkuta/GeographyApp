@@ -21,6 +21,7 @@ namespace GeographyApp.Forms
         {
             InitializeComponent();
             _continents = continents;
+            KeyDown += Form_KeyDown;
 
             // список материків
             cmbContinent.DataSource = _continents;
@@ -96,6 +97,24 @@ namespace GeographyApp.Forms
             }
 
             return true;
+        }
+
+        private void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1)
+            {
+                MessageBox.Show(
+                    "Форма додавання/редагування країни.\n\n" +
+                    "Назва - довільний текст\n" +
+                    "Населення - ціле невід'ємне число\n" +
+                    "Площа (км²) - додатне число\n" +
+                    "Столиця - довільний текст\n" +
+                    "Форма правління - довільний текст\n" +
+                    "Материк - оберіть зі списку\n\n" +
+                    "Enter - зберегти, Esc - скасувати.",
+                    "Довідка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                e.Handled = true;
+            }
         }
     }
 }

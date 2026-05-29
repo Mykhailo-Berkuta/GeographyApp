@@ -118,8 +118,10 @@
             // 
             // ContinentForm
             // 
+            AcceptButton = btnOk;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            CancelButton = btnCancel;
             ClientSize = new Size(364, 261);
             Controls.Add(lblError);
             Controls.Add(btnCancel);
@@ -131,6 +133,7 @@
             Controls.Add(txtName);
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            KeyPreview = true;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "ContinentForm";

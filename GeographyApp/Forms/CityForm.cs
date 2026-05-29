@@ -22,6 +22,7 @@ namespace GeographyApp.Forms
             InitializeComponent();
             _countries = countries;
             _regions = regions;
+            KeyDown += Form_KeyDown;
 
             cmbCountry.DataSource = _countries;
             cmbCountry.DisplayMember = "Name";
@@ -129,6 +130,24 @@ namespace GeographyApp.Forms
             }
 
             return true;
+        }
+
+        private void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1)
+            {
+                MessageBox.Show(
+                    "Форма додавання/редагування міста.\n\n" +
+                    "Назва - довільний текст\n" +
+                    "Населення - ціле невід'ємне число\n" +
+                    "Країна - оберіть зі списку\n" +
+                    "Регіон - оберіть зі списку (залежить від країни)\n" +
+                    "Широта - число від -90 до 90\n" +
+                    "Довгота - число від -180 до 180\n\n" +
+                    "Enter - зберегти, Esc - скасувати.",
+                    "Довідка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                e.Handled = true;
+            }
         }
     }
 }

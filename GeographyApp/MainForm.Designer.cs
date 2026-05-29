@@ -326,6 +326,7 @@
             ClientSize = new Size(1008, 561);
             Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
+            KeyPreview = true;
             MainMenuStrip = menuStrip1;
             Name = "MainForm";
             Text = "Географічний довідник";

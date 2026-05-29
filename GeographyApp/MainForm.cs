@@ -12,7 +12,9 @@ namespace GeographyApp
         {
             InitializeComponent();
             _dataManager.Load();
-            ShowContinents(); // показуємо материки при запуску
+            ShowContinents();
+            KeyDown += MainForm_KeyDown;
+            txtSearch.KeyPress += TxtSearch_KeyPress;
         }
 
         // Навігаційні кнопки 
@@ -345,6 +347,15 @@ namespace GeographyApp
             statusLabel.Text = $"Знайдено записів: {dataGridView.Rows.Count}";
         }
 
+        private void TxtSearch_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                btnSearch_Click(sender, e);
+                e.Handled = true;
+            }
+        }
+
         private void RefreshCurrentView()
         {
             switch (dataGridView.Tag?.ToString())
@@ -448,6 +459,27 @@ namespace GeographyApp
                 MessageBoxIcon.Information);
         }
 
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1)
+            {
+                MessageBox.Show(
+                    "Географічний довідник - довідка\n\n" +
+                    "Навігація:\n" +
+                    "Кнопки ліворуч - перемикання між розділами\n\n" +
+                    "Дії з записами:\n" +
+                    "Додати - додати новий запис\n" +
+                    "Редагувати - змінити виділений запис\n" +
+                    "Видалити - видалити виділений запис\n" +
+                    "На карті - відкрити у Google Maps\n\n" +
+                    "Пошук - введіть текст і натисніть кнопку пошуку\n\n" +
+                    "Файл → Зберегти / Завантажити - робота з файлом\n" +
+                    "Карта → Статистика населення - зведена таблиця\n\n" +
+                    "F1 - ця довідка",
+                    "Довідка", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                e.Handled = true;
+            }
+        }
 
     }
 }

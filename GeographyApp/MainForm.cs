@@ -16,6 +16,11 @@ namespace GeographyApp
             KeyDown += MainForm_KeyDown;
             txtSearch.KeyPress += TxtSearch_KeyPress;
             txtSearch.TextBox.PlaceholderText = "Пошук...";
+
+            dataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(210, 210, 210);
+            dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+            dataGridView.EnableHeadersVisualStyles = false;
+            dataGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(210, 210, 210);
         }
 
         // Навігаційні кнопки 

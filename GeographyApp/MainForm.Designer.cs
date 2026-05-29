@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             menuStrip1 = new MenuStrip();
             menuSave = new ToolStripMenuItem();
@@ -151,6 +152,7 @@
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.IsSplitterFixed = true;
             splitContainer1.Location = new Point(0, 24);
             splitContainer1.Name = "splitContainer1";
             // 
@@ -242,12 +244,22 @@
             // 
             dataGridView.AllowUserToAddRows = false;
             dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.ActiveBorder;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView.Dock = DockStyle.Fill;
             dataGridView.Location = new Point(0, 25);
             dataGridView.MultiSelect = false;
             dataGridView.Name = "dataGridView";
             dataGridView.ReadOnly = true;
+            dataGridView.RowHeadersVisible = false;
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView.Size = new Size(844, 512);
             dataGridView.TabIndex = 1;

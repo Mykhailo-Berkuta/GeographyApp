@@ -15,6 +15,7 @@ namespace GeographyApp
             ShowContinents();
             KeyDown += MainForm_KeyDown;
             txtSearch.KeyPress += TxtSearch_KeyPress;
+            txtSearch.TextBox.PlaceholderText = "Пошук...";
         }
 
         // Навігаційні кнопки 

@@ -54,7 +54,6 @@
             btnEdit = new ToolStripButton();
             btnDelete = new ToolStripButton();
             btnShowMap = new ToolStripButton();
-            toolStripLabel1 = new ToolStripLabel();
             txtSearch = new ToolStripTextBox();
             btnSearch = new ToolStripButton();
             menuStrip1.SuspendLayout();
@@ -255,7 +254,7 @@
             // 
             // toolStrip2
             // 
-            toolStrip2.Items.AddRange(new ToolStripItem[] { btnAdd, btnEdit, btnDelete, btnShowMap, toolStripLabel1, txtSearch, btnSearch });
+            toolStrip2.Items.AddRange(new ToolStripItem[] { btnAdd, btnEdit, btnDelete, btnShowMap, txtSearch, btnSearch });
             toolStrip2.Location = new Point(0, 0);
             toolStrip2.Name = "toolStrip2";
             toolStrip2.Size = new Size(844, 25);
@@ -298,12 +297,6 @@
             btnShowMap.Text = "На карті";
             btnShowMap.Click += btnShowMap_Click;
             // 
-            // toolStripLabel1
-            // 
-            toolStripLabel1.Name = "toolStripLabel1";
-            toolStripLabel1.Size = new Size(49, 22);
-            toolStripLabel1.Text = "Пошук:";
-            // 
             // txtSearch
             // 
             txtSearch.Name = "txtSearch";
@@ -326,6 +319,7 @@
             ClientSize = new Size(1008, 561);
             Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             MainMenuStrip = menuStrip1;
             Name = "MainForm";
@@ -367,7 +361,6 @@
         private DataGridView dataGridView;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel statusLabel;
-        private ToolStripLabel toolStripLabel1;
         private ToolStripTextBox txtSearch;
         private ToolStripButton btnSearch;
         private ToolStripMenuItem зберегтиToolStripMenuItem;

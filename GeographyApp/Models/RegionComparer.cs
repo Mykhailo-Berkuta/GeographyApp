@@ -4,17 +4,26 @@ using System.Text;
 
 namespace GeographyApp.Models
 {
+    /// <summary>
+    /// Порівнювач для Region — підтримує сортування за назвою, населенням та типом.
+    /// </summary>
     public class RegionComparer : IComparer<Region>
     {
         public enum SortBy { Name, Population, Type }
 
         private readonly SortBy _sortBy;
 
+        /// <summary>
+        /// Ініціалізує порівнювач регіонів.
+        /// </summary>
         public RegionComparer(SortBy sortBy)
         {
             _sortBy = sortBy;
         }
 
+        /// <summary>
+        /// Порівнює два регіони згідно вибраного режиму.
+        /// </summary>
         public int Compare(Region? x, Region? y)
         {
             if (x == null || y == null) return 0;

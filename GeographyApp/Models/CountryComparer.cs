@@ -5,17 +5,34 @@ using System.Globalization;
 
 namespace GeographyApp.Models
 {
+    /// <summary>
+    /// Порівнювач для Country — підтримує сортування за назвою, населенням і площею.
+    /// </summary>
     public class CountryComparer : IComparer<Country>
     {
         public enum SortBy { Name, Population, Area }
 
         private readonly SortBy _sortBy;
 
+        /// <summary>
+        /// Ініціалізує порівнювач для країн з обраним режимом сортування.
+        /// </summary>
+        /// <param name="sortBy">Режим сортування (назва, населення, площа).</param>
         public CountryComparer(SortBy sortBy)
         {
             _sortBy = sortBy;
         }
 
+        /// <summary>
+        /// Порівнює дві країни згідно вибраного режиму.
+        /// </summary>
+        /// <param name="x">Перша країна.</param>
+        /// <param name="y">Друга країна.</param>
+        /// <returns>
+        /// Відповідь менше 0, якщо x перед y в сортуванні;
+        /// більше 0, якщо x після y;
+        /// 0, якщо вони рівні.
+        /// </returns>
         public int Compare(Country? x, Country? y)
         {
             if (x == null && y == null) return 0;

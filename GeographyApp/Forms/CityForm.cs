@@ -11,6 +11,10 @@ using Region = GeographyApp.Models.Region;
 
 namespace GeographyApp.Forms
 {
+    /// <summary>
+    /// Форма для додавання або редагування міста. Забезпечує введення назви, населення,
+    /// вибір країни та регіону, а також координат (широта/довгота).
+    /// </summary>
     public partial class CityForm : Form
     {
         private readonly List<Country> _countries;
@@ -18,8 +22,18 @@ namespace GeographyApp.Forms
         private readonly List<City>? _existingCities;
         private readonly string? _originalName;
 
+        /// <summary>
+        /// Результат роботи форми — створений або відредагований об'єкт City.
+        /// Після успішного завершення діалогу (DialogResult.OK) міститься кінцевий об'єкт.
+        /// </summary>
         public City Result { get; private set; }
 
+        /// <summary>
+        /// Конструктор форми додавання міста.
+        /// </summary>
+        /// <param name="countries">Список доступних країн для вибору.</param>
+        /// <param name="regions">Список доступних регіонів (використовується для фільтрації за країною).</param>
+        /// <param name="existingCities">Необов'язковий список існуючих міст для перевірки унікальності.</param>
         public CityForm(List<Country> countries, List<Region> regions, List<City>? existingCities = null)
         {
             InitializeComponent();
@@ -40,14 +54,20 @@ namespace GeographyApp.Forms
             txtLongitude.Text = "0";
         }
 
-        /// Конструктор для редагування існуючого міста
+        /// <summary>
+        /// Конструктор форми для редагування існуючого міста.
+        /// </summary>
+        /// <param name="countries">Список доступних країн для вибору.</param>
+        /// <param name="regions">Список доступних регіонів.</param>
+        /// <param name="existingCities">Необов'язковий список існуючих міст для перевірки унікальності.</param>
+        /// <param name="city">Існуючий об'єкт City для редагування.</param>
         public CityForm(List<Country> countries, List<Region> regions, List<City>? existingCities, City city)
             : this(countries, regions, existingCities)
         {
             txtName.Text = city.Name;
             txtPopulation.Text = city.Population.ToString();
-            txtLatitude.Text = city.Latitude.ToString("F4").Replace(".", ",");
-            txtLongitude.Text = city.Longitude.ToString("F4").Replace(".", ",");
+            txtLatitude.Text = city.Latitude.ToString("F4").Replace(".", ", ");
+            txtLongitude.Text = city.Longitude.ToString("F4").Replace(".", ", ");
             cmbCountry.SelectedItem = _countries
                 .FirstOrDefault(c => c.Name == city.Country.Name);
             cmbRegion.SelectedItem = _regions
@@ -56,7 +76,9 @@ namespace GeographyApp.Forms
             _originalName = city.Name;
         }
 
-        /// Оновлює список регіонів відповідно до обраної країни
+        /// <summary>
+        /// Оновлює список регіонів у випадаючому списку згідно з вибраною країною.
+        /// </summary>
         private void UpdateRegions()
         {
             if (cmbCountry.SelectedItem is Country selectedCountry)
@@ -94,7 +116,11 @@ namespace GeographyApp.Forms
             Close();
         }
 
-        /// Перевірка
+        /// <summary>
+        /// Перевіряє правильність введених даних у формі.
+        /// Показує повідомлення про помилку в lblError і повертає false при невірних даних.
+        /// </summary>
+        /// <returns>true якщо всі поля валідні, інакше false.</returns>
         private bool ValidateInput()
         {
             lblError.Text = "";
@@ -153,6 +179,9 @@ namespace GeographyApp.Forms
             return true;
         }
 
+        /// <summary>
+        /// Обробник натискання клавіші F1 — показує довідку по формі.
+        /// </summary>
         private void Form_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F1)

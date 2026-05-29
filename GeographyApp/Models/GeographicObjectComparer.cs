@@ -5,17 +5,27 @@ using System.Globalization;
 
 namespace GeographyApp.Models
 {
+    /// <summary>
+    /// Порівнювач для GeographicObject: дозволяє сортувати за назвою або населенням.
+    /// Імена порівнюються з урахуванням культури, а населення сортується від більшого до меншого.
+    /// </summary>
     public class GeographicObjectComparer : IComparer<GeographicObject>
     {
         public enum SortBy { Name, Population }
 
         private readonly SortBy _sortBy;
 
+        /// <summary>
+        /// Створює екземпляр порівнювача з вказаним режимом сортування.
+        /// </summary>
         public GeographicObjectComparer(SortBy sortBy)
         {
             _sortBy = sortBy;
         }
 
+        /// <summary>
+        /// Порівнює два об'єкти GeographicObject згідно вибраного режиму.
+        /// </summary>
         public int Compare(GeographicObject? x, GeographicObject? y)
         {
             if (x == null && y == null) return 0;

@@ -7,19 +7,38 @@ using Region = GeographyApp.Models.Region;
 
 namespace GeographyApp.Services
 {
+    /// <summary>
+    /// Клас для зберігання та керування колекціями географічних даних (материки, країни, регіони, міста).
+    /// Забезпечує завантаження, збереження та ініціалізацію тестових даних.
+    /// </summary>
     public class DataManager
     {
         // Шлях до файлу збереження даних
         private readonly string _filePath = "geography_data.json";
 
+        /// <summary>
+        /// Колекція материків, що зберігається в пам'яті.
+        /// </summary>
         public List<Continent> Continents { get; private set; } = new();
 
+        /// <summary>
+        /// Колекція країн, що зберігається в пам'яті.
+        /// </summary>
         public List<Country> Countries { get; private set; } = new();
 
+        /// <summary>
+        /// Колекція регіонів, що зберігається в пам'яті.
+        /// </summary>
         public List<Region> Regions { get; private set; } = new();
 
+        /// <summary>
+        /// Колекція міст, що зберігається в пам'яті.
+        /// </summary>
         public List<City> Cities { get; private set; } = new();
 
+        /// <summary>
+        /// Завантажує зразкові дані у колекції (використовується як запасний варіант).
+        /// </summary>
         public void LoadSampleData()
         {
             // Материки
@@ -47,7 +66,9 @@ namespace GeographyApp.Services
             Cities.AddRange(new[] { kharkiv, kyiv });
         }
 
-        /// Зберігає всі дані у JSON файл.
+        /// <summary>
+        /// Зберігає поточні дані у JSON-файл.
+        /// </summary>
         public void Save()
         {
             var data = new AppData
@@ -91,8 +112,10 @@ namespace GeographyApp.Services
             File.WriteAllText(_filePath, json);
         }
 
-        /// Завантаження даних з JSON файлу
-        /// Якщо файл не існує завантажує тестові дані.
+        /// <summary>
+        /// Завантажує дані з JSON-файлу. Якщо файл не існує — завантажує тестові дані.
+        /// При завантаженні ігнорує записи, чиї батьківські об'єкти не знайдено.
+        /// </summary>
         public void Load()
         {
             if (!File.Exists(_filePath))

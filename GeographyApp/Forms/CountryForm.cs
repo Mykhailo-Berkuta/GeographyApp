@@ -11,15 +11,26 @@ using Region = GeographyApp.Models.Region;
 
 namespace GeographyApp.Forms
 {
+    /// <summary>
     /// Форма для додавання або редагування країни.
+    /// Забезпечує введення назви, населення, площі, столиці, форми правління та вибір материка.
+    /// </summary>
     public partial class CountryForm : Form
     {
         private readonly List<Continent> _continents;
         private readonly List<Country>? _existingCountries;
         private readonly string? _originalName;
 
+        /// <summary>
+        /// Результат роботи форми — створений або відредагований об'єкт Country.
+        /// </summary>
         public Country Result { get; private set; }
 
+        /// <summary>
+        /// Конструктор форми додавання країни.
+        /// </summary>
+        /// <param name="continents">Список доступних материків.</param>
+        /// <param name="existingCountries">Необов'язковий список існуючих країн для перевірки унікальності.</param>
         public CountryForm(List<Continent> continents, List<Country>? existingCountries = null)
         {
             InitializeComponent();
@@ -32,7 +43,12 @@ namespace GeographyApp.Forms
             cmbContinent.DisplayMember = "Name";
         }
 
-        /// Конструктор для редагування існуючої країни
+        /// <summary>
+        /// Конструктор форми для редагування існуючої країни.
+        /// </summary>
+        /// <param name="continents">Список материків.</param>
+        /// <param name="existingCountries">Список існуючих країн для перевірки унікальності.</param>
+        /// <param name="country">Існуючий об'єкт Country для редагування.</param>
         public CountryForm(List<Continent> continents, List<Country>? existingCountries, Country country)
             : this(continents, existingCountries)
         {
@@ -73,7 +89,9 @@ namespace GeographyApp.Forms
             Close();
         }
 
-        /// Перевіряє правильність заповнення полів форми
+        /// <summary>
+        /// Перевіряє правильність заповнення полів форми.
+        /// </summary>
         private bool ValidateInput()
         {
             lblError.Text = "";

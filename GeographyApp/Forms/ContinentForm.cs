@@ -10,13 +10,23 @@ using GeographyApp.Models;
 
 namespace GeographyApp.Forms
 {
+    /// <summary>
+    /// Форма для додавання або редагування материка. Забезпечує введення назви, населення та площі.
+    /// </summary>
     public partial class ContinentForm : Form
     {
+        /// <summary>
+        /// Результат роботи форми — створений або відредагований об'єкт Continent.
+        /// </summary>
         public Continent Result { get; private set; }
 
         private readonly List<Continent>? _existingContinents;
         private readonly string? _originalName;
 
+        /// <summary>
+        /// Конструктор форми додавання материка.
+        /// </summary>
+        /// <param name="existingContinents">Необов'язковий список існуючих материків для перевірки унікальності.</param>
         public ContinentForm(List<Continent>? existingContinents = null)
         {
             InitializeComponent();
@@ -24,7 +34,11 @@ namespace GeographyApp.Forms
             _existingContinents = existingContinents;
         }
 
-        /// Конструктор для редагування існуючого материка
+        /// <summary>
+        /// Конструктор форми для редагування існуючого материка.
+        /// </summary>
+        /// <param name="continent">Існуючий матеріk для редагування.</param>
+        /// <param name="existingContinents">Необов'язковий список існуючих материків для перевірки унікальності.</param>
         public ContinentForm(Continent continent, List<Continent>? existingContinents = null) : this(existingContinents)
         {
             txtName.Text = continent.Name;
@@ -59,7 +73,9 @@ namespace GeographyApp.Forms
             Close();
         }
 
-        /// Перевіряє правильність заповнення полів форми
+        /// <summary>
+        /// Перевіряє правильність заповнення полів форми.
+        /// </summary>
         private bool ValidateInput()
         {
             lblError.Text = "";

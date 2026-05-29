@@ -10,15 +10,26 @@ using GeographyApp.Models;
 
 namespace GeographyApp.Forms
 {
-    /// Форма для додавання або редагування регіону
+    /// <summary>
+    /// Форма для додавання або редагування регіону.
+    /// Забезпечує введення назви, населення, типу регіону, адміністративного центру та вибір країни.
+    /// </summary>
     public partial class RegionForm : Form
     {
         private readonly List<Country> _countries;
         private readonly List<Models.Region>? _existingRegions;
         private readonly string? _originalName;
 
+        /// <summary>
+        /// Результат роботи форми — створений або відредагований об'єкт Region.
+        /// </summary>
         public Models.Region Result { get; private set; }
 
+        /// <summary>
+        /// Конструктор форми додавання регіону.
+        /// </summary>
+        /// <param name="countries">Список доступних країн для вибору.</param>
+        /// <param name="existingRegions">Необов'язковий список існуючих регіонів для перевірки унікальності.</param>
         public RegionForm(List<Country> countries, List<Models.Region>? existingRegions = null)
         {
             InitializeComponent();
@@ -29,7 +40,12 @@ namespace GeographyApp.Forms
             KeyDown += Form_KeyDown;
         }
 
-        /// Конструктор для редагування існуючого регіону
+        /// <summary>
+        /// Конструктор форми для редагування існуючого регіону.
+        /// </summary>
+        /// <param name="countries">Список доступних країн для вибору.</param>
+        /// <param name="existingRegions">Необов'язковий список існуючих регіонів для перевірки унікальності.</param>
+        /// <param name="region">Існуючий об'єкт Region для редагування.</param>
         public RegionForm(List<Country> countries, List<Models.Region>? existingRegions, Models.Region region)
             : this(countries, existingRegions)
         {
@@ -65,7 +81,9 @@ namespace GeographyApp.Forms
             Close();
         }
 
-        /// Перевірка
+        /// <summary>
+        /// Перевіряє правильність введених даних у формі.
+        /// </summary>
         private bool ValidateInput()
         {
             lblError.Text = "";

@@ -36,10 +36,12 @@
             menuLoad = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             menuExit = new ToolStripMenuItem();
+            пошукToolStripMenuItem = new ToolStripMenuItem();
             menuStats = new ToolStripMenuItem();
             статистикаНаселенняToolStripMenuItem = new ToolStripMenuItem();
-            довідкаToolStripMenuItem = new ToolStripMenuItem();
+            menuHelp = new ToolStripMenuItem();
             menuAbout = new ToolStripMenuItem();
+            довідкаToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             btnCities = new Button();
             btnRegions = new Button();
@@ -59,7 +61,6 @@
             btnShowMap = new ToolStripButton();
             txtSearch = new ToolStripTextBox();
             btnSearch = new ToolStripButton();
-            пошукToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -72,7 +73,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { menuSave, пошукToolStripMenuItem, menuStats, довідкаToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menuSave, пошукToolStripMenuItem, menuStats, menuHelp, menuAbout });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1008, 24);
@@ -112,6 +113,13 @@
             menuExit.Text = "Вихід";
             menuExit.Click += menuExit_Click;
             // 
+            // пошукToolStripMenuItem
+            // 
+            пошукToolStripMenuItem.Name = "пошукToolStripMenuItem";
+            пошукToolStripMenuItem.Size = new Size(58, 20);
+            пошукToolStripMenuItem.Text = "Пошук";
+            пошукToolStripMenuItem.Click += пошукToolStripMenuItem_Click;
+            // 
             // menuStats
             // 
             menuStats.DropDownItems.AddRange(new ToolStripItem[] { статистикаНаселенняToolStripMenuItem });
@@ -126,19 +134,25 @@
             статистикаНаселенняToolStripMenuItem.Text = "Статистика населення";
             статистикаНаселенняToolStripMenuItem.Click += menuStats_Click;
             // 
-            // довідкаToolStripMenuItem
+            // menuHelp
             // 
-            довідкаToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuAbout });
-            довідкаToolStripMenuItem.Name = "довідкаToolStripMenuItem";
-            довідкаToolStripMenuItem.Size = new Size(61, 20);
-            довідкаToolStripMenuItem.Text = "Довідка";
+            menuHelp.Name = "menuHelp";
+            menuHelp.Size = new Size(61, 20);
+            menuHelp.Text = "Довідка";
+            menuHelp.Click += menuHelp_Click;
             // 
             // menuAbout
             // 
             menuAbout.Name = "menuAbout";
-            menuAbout.Size = new Size(154, 22);
+            menuAbout.Size = new Size(99, 20);
             menuAbout.Text = "Про програму";
             menuAbout.Click += menuAbout_Click;
+            // 
+            // довідкаToolStripMenuItem
+            // 
+            довідкаToolStripMenuItem.Name = "довідкаToolStripMenuItem";
+            довідкаToolStripMenuItem.Size = new Size(61, 20);
+            довідкаToolStripMenuItem.Text = "Довідка";
             // 
             // splitContainer1
             // 
@@ -349,13 +363,6 @@
             btnSearch.Text = "toolStripButton1";
             btnSearch.Click += btnSearch_Click;
             // 
-            // пошукToolStripMenuItem
-            // 
-            пошукToolStripMenuItem.Name = "пошукToolStripMenuItem";
-            пошукToolStripMenuItem.Size = new Size(58, 20);
-            пошукToolStripMenuItem.Text = "Пошук";
-            пошукToolStripMenuItem.Click += пошукToolStripMenuItem_Click;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -412,6 +419,7 @@
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem menuExit;
         private ToolStripMenuItem статистикаНаселенняToolStripMenuItem;
+        private ToolStripMenuItem menuHelp;
         private ToolStripMenuItem menuAbout;
         private ToolStripDropDownButton btnSort;
         private ToolStripMenuItem заНазвоюToolStripMenuItem;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using GeographyApp.Models;
@@ -14,14 +15,17 @@ namespace GeographyApp.Forms
     {
         private readonly List<Country> _countries;
         private readonly List<Region> _regions;
+        private readonly List<City>? _existingCities;
+        private readonly string? _originalName;
 
         public City Result { get; private set; }
 
-        public CityForm(List<Country> countries, List<Region> regions)
+        public CityForm(List<Country> countries, List<Region> regions, List<City>? existingCities = null)
         {
             InitializeComponent();
             _countries = countries;
             _regions = regions;
+            _existingCities = existingCities;
             KeyDown += Form_KeyDown;
 
             cmbCountry.DataSource = _countries;
@@ -37,8 +41,8 @@ namespace GeographyApp.Forms
         }
 
         /// Конструктор для редагування існуючого міста
-        public CityForm(List<Country> countries, List<Region> regions, City city)
-            : this(countries, regions)
+        public CityForm(List<Country> countries, List<Region> regions, List<City>? existingCities, City city)
+            : this(countries, regions, existingCities)
         {
             txtName.Text = city.Name;
             txtPopulation.Text = city.Population.ToString();
@@ -49,6 +53,7 @@ namespace GeographyApp.Forms
             cmbRegion.SelectedItem = _regions
                 .FirstOrDefault(r => r.Name == city.Region.Name);
             Text = "Редагування міста";
+            _originalName = city.Name;
         }
 
         /// Оновлює список регіонів відповідно до обраної країни
@@ -94,7 +99,9 @@ namespace GeographyApp.Forms
         {
             lblError.Text = "";
 
-            if (string.IsNullOrWhiteSpace(txtName.Text))
+            var name = txtName.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
             {
                 lblError.Text = "Введіть назву міста!";
                 return false;
@@ -127,6 +134,20 @@ namespace GeographyApp.Forms
             {
                 lblError.Text = "Оберіть регіон!";
                 return false;
+            }
+
+            // Унікальність: немає двох міст з однаковою назвою в одній країні
+            if (_existingCities != null)
+            {
+                var selectedCountry = (Country)cmbCountry.SelectedItem;
+                bool duplicate = _existingCities.Any(c => string.Equals(c.Name, name, StringComparison.CurrentCultureIgnoreCase)
+                                                          && c.Country.Name == selectedCountry.Name
+                                                          && !string.Equals(c.Name, _originalName, StringComparison.CurrentCultureIgnoreCase));
+                if (duplicate)
+                {
+                    lblError.Text = "У цій країні вже існує місто з такою назвою!";
+                    return false;
+                }
             }
 
             return true;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using GeographyApp.Models;
@@ -13,20 +14,24 @@ namespace GeographyApp.Forms
     {
         public Continent Result { get; private set; }
 
+        private readonly List<Continent>? _existingContinents;
+        private readonly string? _originalName;
 
-        public ContinentForm()
+        public ContinentForm(List<Continent>? existingContinents = null)
         {
             InitializeComponent();
             KeyDown += Form_KeyDown;
+            _existingContinents = existingContinents;
         }
 
         /// Конструктор для редагування існуючого материка
-        public ContinentForm(Continent continent) : this()
+        public ContinentForm(Continent continent, List<Continent>? existingContinents = null) : this(existingContinents)
         {
             txtName.Text = continent.Name;
             txtPopulation.Text = continent.Population.ToString();
             txtArea.Text = continent.Area.ToString();
             Text = "Редагування материка";
+            _originalName = continent.Name;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -34,10 +39,14 @@ namespace GeographyApp.Forms
             // Перевірка введених даних
             if (!ValidateInput()) return;
 
+            // Використовуємо вже перевірені значення
+            long pop = long.Parse(txtPopulation.Text.Trim());
+            double area = double.Parse(txtArea.Text.Trim().Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+
             Result = new Continent(
                 txtName.Text.Trim(),
-                long.Parse(txtPopulation.Text.Trim()),
-                double.Parse(txtArea.Text.Trim())
+                pop,
+                area
             );
 
             DialogResult = DialogResult.OK;
@@ -55,10 +64,22 @@ namespace GeographyApp.Forms
         {
             lblError.Text = "";
 
-            if (string.IsNullOrWhiteSpace(txtName.Text))
+            var name = txtName.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
             {
                 lblError.Text = "Введіть назву материка!";
                 return false;
+            }
+
+            if (_existingContinents != null)
+            {
+                bool duplicate = _existingContinents.Any(c => string.Equals(c.Name, name, StringComparison.CurrentCultureIgnoreCase) && !string.Equals(c.Name, _originalName, StringComparison.CurrentCultureIgnoreCase));
+                if (duplicate)
+                {
+                    lblError.Text = "Материк з такою назвою вже існує!";
+                    return false;
+                }
             }
 
             if (!long.TryParse(txtPopulation.Text.Trim(), out long pop) || pop < 0)
@@ -67,7 +88,7 @@ namespace GeographyApp.Forms
                 return false;
             }
 
-            if (!double.TryParse(txtArea.Text.Trim(), out double area) || area <= 0)
+            if (!double.TryParse(txtArea.Text.Trim().Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture, out double area) || area <= 0)
             {
                 lblError.Text = "Площа - додатне число!";
                 return false;

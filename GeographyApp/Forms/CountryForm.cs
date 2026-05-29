@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using GeographyApp.Models;
@@ -14,13 +15,16 @@ namespace GeographyApp.Forms
     public partial class CountryForm : Form
     {
         private readonly List<Continent> _continents;
+        private readonly List<Country>? _existingCountries;
+        private readonly string? _originalName;
 
         public Country Result { get; private set; }
 
-        public CountryForm(List<Continent> continents)
+        public CountryForm(List<Continent> continents, List<Country>? existingCountries = null)
         {
             InitializeComponent();
             _continents = continents;
+            _existingCountries = existingCountries;
             KeyDown += Form_KeyDown;
 
             // список материків
@@ -29,8 +33,8 @@ namespace GeographyApp.Forms
         }
 
         /// Конструктор для редагування існуючої країни
-        public CountryForm(List<Continent> continents, Country country)
-            : this(continents)
+        public CountryForm(List<Continent> continents, List<Country>? existingCountries, Country country)
+            : this(continents, existingCountries)
         {
             txtName.Text = country.Name;
             txtPopulation.Text = country.Population.ToString();
@@ -40,16 +44,20 @@ namespace GeographyApp.Forms
             cmbContinent.SelectedItem = _continents
                 .FirstOrDefault(c => c.Name == country.Continent.Name);
             Text = "Редагування країни";
+            _originalName = country.Name;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
         {
             if (!ValidateInput()) return;
 
+            long pop = long.Parse(txtPopulation.Text.Trim());
+            double area = double.Parse(txtArea.Text.Trim().Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+
             Result = new Country(
                 txtName.Text.Trim(),
-                long.Parse(txtPopulation.Text.Trim()),
-                double.Parse(txtArea.Text.Trim()),
+                pop,
+                area,
                 txtGovernment.Text.Trim(),
                 txtCapital.Text.Trim(),
                 (Continent)cmbContinent.SelectedItem
@@ -70,17 +78,30 @@ namespace GeographyApp.Forms
         {
             lblError.Text = "";
 
-            if (string.IsNullOrWhiteSpace(txtName.Text))
+            var name = txtName.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
             {
                 lblError.Text = "Введіть назву країни!";
                 return false;
             }
+
+            if (_existingCountries != null)
+            {
+                bool duplicate = _existingCountries.Any(c => string.Equals(c.Name, name, StringComparison.CurrentCultureIgnoreCase) && !string.Equals(c.Name, _originalName, StringComparison.CurrentCultureIgnoreCase));
+                if (duplicate)
+                {
+                    lblError.Text = "Країна з такою назвою вже існує!";
+                    return false;
+                }
+            }
+
             if (!long.TryParse(txtPopulation.Text.Trim(), out long pop) || pop < 0)
             {
                 lblError.Text = "Населення - ціле невід'ємне число!";
                 return false;
             }
-            if (!double.TryParse(txtArea.Text.Trim(), out double area) || area <= 0)
+            if (!double.TryParse(txtArea.Text.Trim().Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture, out double area) || area <= 0)
             {
                 lblError.Text = "Площа - додатне число!";
                 return false;

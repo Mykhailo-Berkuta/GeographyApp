@@ -107,17 +107,19 @@ namespace GeographyApp.Services
 
             Continents = data.Continents;
 
-            Countries = data.Countries.Select(d => new Country(
-                d.Name, d.Population, d.Area, d.GovernmentForm, d.Capital,
-                Continents.First(c => c.Name == d.ContinentName) ?? throw new InvalidOperationException($"Continent '{d.ContinentName}' not found")
-            )).Where(c => c.Continent != null).ToList();
+            Countries = data.Countries.Select(d =>
+            {
+                var continent = Continents.FirstOrDefault(c => c.Name == d.ContinentName);
+                if (continent == null) return null;
+                return new Country(d.Name, d.Population, d.Area, d.GovernmentForm, d.Capital, continent);
+            }).Where(c => c != null).Select(c => c!).ToList();
 
             Regions = data.Regions.Select(d =>
             {
                 var country = Countries.FirstOrDefault(c => c.Name == d.CountryName);
                 if (country == null) return null;
                 return new Region(d.Name, d.Population, d.RegionType, d.Capital, country);
-            }).Where(r => r != null).ToList();
+            }).Where(r => r != null).Select(r => r!).ToList();
 
             Cities = data.Cities.Select(d =>
             {
@@ -125,7 +127,7 @@ namespace GeographyApp.Services
                 var country = Countries.FirstOrDefault(c => c.Name == d.CountryName);
                 if (region == null || country == null) return null;
                 return new City(d.Name, d.Population, region, country, d.Latitude, d.Longitude);
-            }).Where(c => c != null).ToList();
+            }).Where(c => c != null).Select(c => c!).ToList();
         }
 
         // DTO класи для серіалізації

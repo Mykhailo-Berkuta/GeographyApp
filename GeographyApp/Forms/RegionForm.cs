@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using GeographyApp.Models;
@@ -13,21 +14,24 @@ namespace GeographyApp.Forms
     public partial class RegionForm : Form
     {
         private readonly List<Country> _countries;
+        private readonly List<Models.Region>? _existingRegions;
+        private readonly string? _originalName;
 
         public Models.Region Result { get; private set; }
 
-        public RegionForm(List<Country> countries)
+        public RegionForm(List<Country> countries, List<Models.Region>? existingRegions = null)
         {
             InitializeComponent();
             _countries = countries;
+            _existingRegions = existingRegions;
             cmbCountry.DataSource = _countries;
             cmbCountry.DisplayMember = "Name";
             KeyDown += Form_KeyDown;
         }
 
         /// Конструктор для редагування існуючого регіону
-        public RegionForm(List<Country> countries, Models.Region region)
-            : this(countries)
+        public RegionForm(List<Country> countries, List<Models.Region>? existingRegions, Models.Region region)
+            : this(countries, existingRegions)
         {
             txtName.Text = region.Name;
             txtPopulation.Text = region.Population.ToString();
@@ -36,6 +40,7 @@ namespace GeographyApp.Forms
             cmbCountry.SelectedItem = _countries
                 .FirstOrDefault(c => c.Name == region.Country.Name);
             Text = "Редагування регіону";
+            _originalName = region.Name;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -65,11 +70,24 @@ namespace GeographyApp.Forms
         {
             lblError.Text = "";
 
-            if (string.IsNullOrWhiteSpace(txtName.Text))
+            var name = txtName.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
             {
                 lblError.Text = "Введіть назву регіону!";
                 return false;
             }
+
+            if (_existingRegions != null)
+            {
+                bool duplicate = _existingRegions.Any(r => string.Equals(r.Name, name, StringComparison.CurrentCultureIgnoreCase) && !string.Equals(r.Name, _originalName, StringComparison.CurrentCultureIgnoreCase));
+                if (duplicate)
+                {
+                    lblError.Text = "Регіон з такою назвою вже існує!";
+                    return false;
+                }
+            }
+
             if (!long.TryParse(txtPopulation.Text.Trim(), out long pop) || pop < 0)
             {
                 lblError.Text = "Населення - ціле невід'ємне число!";

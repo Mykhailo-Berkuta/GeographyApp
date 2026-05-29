@@ -7,7 +7,9 @@ namespace GeographyApp
     {
         // зберігає всі колекції
         private readonly DataManager _dataManager = new();
-        
+        // Відстежуємо незбережені зміни
+        private bool _isDirty = false;
+
         // Для фільтрації по батьківському об'єкту
         private string? _continentFilter;
         private string? _countryFilter;
@@ -195,10 +197,11 @@ namespace GeographyApp
         {
             if (dataGridView.Tag?.ToString() == "continents")
             {
-                using var form = new Forms.ContinentForm();
+                using var form = new Forms.ContinentForm(_dataManager.Continents);
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
                     _dataManager.Continents.Add(form.Result);
+                    _isDirty = true;
                     ShowContinents();
                 }
             }
@@ -210,10 +213,11 @@ namespace GeographyApp
                         "Увага", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                using var form = new Forms.CountryForm(_dataManager.Continents);
+                using var form = new Forms.CountryForm(_dataManager.Continents, _dataManager.Countries);
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
                     _dataManager.Countries.Add(form.Result);
+                    _isDirty = true;
                     ShowCountries();
                 }
             }
@@ -226,10 +230,11 @@ namespace GeographyApp
                         "Увага", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                using var form = new Forms.RegionForm(_dataManager.Countries);
+                using var form = new Forms.RegionForm(_dataManager.Countries, _dataManager.Regions);
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
                     _dataManager.Regions.Add(form.Result);
+                    _isDirty = true;
                     ShowRegions();
                 }
             }
@@ -243,10 +248,11 @@ namespace GeographyApp
                     return;
                 }
                 using var form = new Forms.CityForm(
-                    _dataManager.Countries, _dataManager.Regions);
+                    _dataManager.Countries, _dataManager.Regions, _dataManager.Cities);
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
                     _dataManager.Cities.Add(form.Result);
+                    _isDirty = true;
                     ShowCities();
                 }
             }
@@ -279,10 +285,11 @@ namespace GeographyApp
                         return;
                     }
                     var continent = _dataManager.Continents[idx];
-                    using var form = new Forms.ContinentForm(continent);
+                    using var form = new Forms.ContinentForm(continent, _dataManager.Continents);
                     if (form.ShowDialog(this) == DialogResult.OK)
                     {
                         _dataManager.Continents[idx] = form.Result;
+                        _isDirty = true;
                         ShowContinents();
                     }
                 }
@@ -295,10 +302,11 @@ namespace GeographyApp
                         return;
                     }
                     var country = _dataManager.Countries[idx];
-                    using var form = new Forms.CountryForm(_dataManager.Continents, country);
+                    using var form = new Forms.CountryForm(_dataManager.Continents, _dataManager.Countries, country);
                     if (form.ShowDialog(this) == DialogResult.OK)
                     {
                         _dataManager.Countries[idx] = form.Result;
+                        _isDirty = true;
                         ShowCountries();
                     }
                 }
@@ -311,10 +319,11 @@ namespace GeographyApp
                         return;
                     }
                     var region = _dataManager.Regions[idx];
-                    using var form = new Forms.RegionForm(_dataManager.Countries, region);
+                    using var form = new Forms.RegionForm(_dataManager.Countries, _dataManager.Regions, region);
                     if (form.ShowDialog(this) == DialogResult.OK)
                     {
                         _dataManager.Regions[idx] = form.Result;
+                        _isDirty = true;
                         ShowRegions();
                     }
                 }
@@ -327,10 +336,11 @@ namespace GeographyApp
                         return;
                     }
                     var city = _dataManager.Cities[idx];
-                    using var form = new Forms.CityForm(_dataManager.Countries, _dataManager.Regions, city);
+                    using var form = new Forms.CityForm(_dataManager.Countries, _dataManager.Regions, _dataManager.Cities, city);
                     if (form.ShowDialog(this) == DialogResult.OK)
                     {
                         _dataManager.Cities[idx] = form.Result;
+                        _isDirty = true;
                         ShowCities();
                     }
                 }
@@ -359,7 +369,7 @@ namespace GeographyApp
                 }
 
                 var confirm = MessageBox.Show(
-                    "Ви впевнені, що хочете видалити цей запис? Ця дія необоротна.",
+                    $"Видалити «{name}»? Ця дія необоротна.",
                     "Підтвердження видалення", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (confirm != DialogResult.Yes) return;
@@ -377,6 +387,7 @@ namespace GeographyApp
                         return;
                     }
                     _dataManager.Continents.RemoveAt(idx);
+                    _isDirty = true;
                     ShowContinents();
                 }
                 else if (tag == "countries")
@@ -392,6 +403,7 @@ namespace GeographyApp
                         return;
                     }
                     _dataManager.Countries.RemoveAt(idx);
+                    _isDirty = true;
                     ShowCountries();
                 }
                 else if (tag == "regions")
@@ -406,6 +418,7 @@ namespace GeographyApp
                         return;
                     }
                     _dataManager.Regions.RemoveAt(idx);
+                    _isDirty = true;
                     ShowRegions();
                 }
                 else if (tag == "cities")
@@ -413,6 +426,7 @@ namespace GeographyApp
                     int idx = FindIndexByName(_dataManager.Cities, name);
                     if (idx < 0) { MessageBox.Show("Місто не знайдено.", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
                     _dataManager.Cities.RemoveAt(idx);
+                    _isDirty = true;
                     ShowCities();
                 }
             }
@@ -589,6 +603,7 @@ namespace GeographyApp
             try
             {
                 _dataManager.Save();
+                _isDirty = false;
                 MessageBox.Show("Дані збережено!", "Збереження", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -596,13 +611,19 @@ namespace GeographyApp
                 MessageBox.Show($"Не вдалося зберегти дані: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+ 
         private void menuLoad_Click(object sender, EventArgs e)
         {
+            if (_isDirty)
+            {
+                var res = MessageBox.Show("Є незбережені зміни. Завантажити файл і втратити ці зміни?", "Підтвердження", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (res != DialogResult.Yes) return;
+            }
             try
             {
                 _dataManager.Load();
                 RefreshCurrentView();
+                _isDirty = false;
                 MessageBox.Show("Дані завантажено!", "Завантаження", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)

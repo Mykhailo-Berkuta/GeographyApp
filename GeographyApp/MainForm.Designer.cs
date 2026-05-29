@@ -36,8 +36,6 @@
             menuLoad = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             menuExit = new ToolStripMenuItem();
-            toolStripMenuItem1 = new ToolStripMenuItem();
-            пошукToolStripMenuItem = new ToolStripMenuItem();
             menuStats = new ToolStripMenuItem();
             статистикаНаселенняToolStripMenuItem = new ToolStripMenuItem();
             довідкаToolStripMenuItem = new ToolStripMenuItem();
@@ -61,6 +59,7 @@
             btnShowMap = new ToolStripButton();
             txtSearch = new ToolStripTextBox();
             btnSearch = new ToolStripButton();
+            пошукToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -73,7 +72,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { menuSave, toolStripMenuItem1, пошукToolStripMenuItem, menuStats, довідкаToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menuSave, пошукToolStripMenuItem, menuStats, довідкаToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1008, 24);
@@ -112,18 +111,6 @@
             menuExit.Size = new Size(145, 22);
             menuExit.Text = "Вихід";
             menuExit.Click += menuExit_Click;
-            // 
-            // toolStripMenuItem1
-            // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(43, 20);
-            toolStripMenuItem1.Text = "Дані";
-            // 
-            // пошукToolStripMenuItem
-            // 
-            пошукToolStripMenuItem.Name = "пошукToolStripMenuItem";
-            пошукToolStripMenuItem.Size = new Size(58, 20);
-            пошукToolStripMenuItem.Text = "Пошук";
             // 
             // menuStats
             // 
@@ -179,7 +166,7 @@
             // 
             // btnCities
             // 
-            btnCities.Dock = DockStyle.Top;
+            btnCities.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             btnCities.FlatAppearance.BorderSize = 0;
             btnCities.FlatStyle = FlatStyle.Flat;
             btnCities.Location = new Point(0, 135);
@@ -192,7 +179,7 @@
             // 
             // btnRegions
             // 
-            btnRegions.Dock = DockStyle.Top;
+            btnRegions.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             btnRegions.FlatAppearance.BorderSize = 0;
             btnRegions.FlatStyle = FlatStyle.Flat;
             btnRegions.Location = new Point(0, 90);
@@ -205,7 +192,7 @@
             // 
             // btnCountries
             // 
-            btnCountries.Dock = DockStyle.Top;
+            btnCountries.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             btnCountries.FlatAppearance.BorderSize = 0;
             btnCountries.FlatStyle = FlatStyle.Flat;
             btnCountries.Location = new Point(0, 45);
@@ -218,7 +205,7 @@
             // 
             // btnContinents
             // 
-            btnContinents.Dock = DockStyle.Top;
+            btnContinents.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             btnContinents.FlatAppearance.BorderSize = 0;
             btnContinents.FlatStyle = FlatStyle.Flat;
             btnContinents.Location = new Point(0, 0);
@@ -362,6 +349,12 @@
             btnSearch.Text = "toolStripButton1";
             btnSearch.Click += btnSearch_Click;
             // 
+            // пошукToolStripMenuItem
+            // 
+            пошукToolStripMenuItem.Name = "пошукToolStripMenuItem";
+            пошукToolStripMenuItem.Size = new Size(58, 20);
+            пошукToolStripMenuItem.Text = "Пошук";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -372,6 +365,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             MainMenuStrip = menuStrip1;
+            MinimumSize = new Size(700, 450);
             Name = "MainForm";
             Text = "Географічний довідник";
             menuStrip1.ResumeLayout(false);
@@ -395,7 +389,6 @@
         private MenuStrip menuStrip1;
         private ToolStripMenuItem menuSave;
         private ToolStripMenuItem даніToolStripMenuItem;
-        private ToolStripMenuItem пошукToolStripMenuItem;
         private ToolStripMenuItem menuStats;
         private ToolStripMenuItem довідкаToolStripMenuItem;
         private SplitContainer splitContainer1;
@@ -419,10 +412,10 @@
         private ToolStripMenuItem menuExit;
         private ToolStripMenuItem статистикаНаселенняToolStripMenuItem;
         private ToolStripMenuItem menuAbout;
-        private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripDropDownButton btnSort;
         private ToolStripMenuItem заНазвоюToolStripMenuItem;
         private ToolStripMenuItem заНаселеннямToolStripMenuItem;
         private ToolStripMenuItem заПлощеюToolStripMenuItem;
+        private ToolStripMenuItem пошукToolStripMenuItem;
     }
 }

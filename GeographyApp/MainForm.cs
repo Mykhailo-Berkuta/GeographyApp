@@ -26,8 +26,6 @@ namespace GeographyApp
             dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
             dataGridView.EnableHeadersVisualStyles = false;
             dataGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(210, 210, 210);
-            // Ensure dropdown sort menu items trigger sorting even if their Click handlers
-            // are not invoked for some reason (forward to existing handlers).
             btnSort.DropDownItemClicked += BtnSort_DropDownItemClicked;
             
             // Додаємо обробник подвійного клику для фільтрації по батьківському об'єкту
@@ -713,33 +711,39 @@ namespace GeographyApp
 
             if (tag == "continents")
             {
-                // Подвійний клік на материк — перейти до країн та відфільтрувати
-                int index = dataGridView.CurrentRow.Index;
-                var continent = _dataManager.Continents[index];
-                _continentFilter = continent.Name;
-                _countryFilter = null;
-                _regionFilter = null;
-                txtSearch.Text = string.Empty;
-                btnCountries.PerformClick();
+                // Отримуємо назву матеріку прямо з DataGridView
+                var continentName = dataGridView.CurrentRow.Cells["Назва"].Value?.ToString();
+                if (!string.IsNullOrEmpty(continentName))
+                {
+                    _continentFilter = continentName;
+                    _countryFilter = null;
+                    _regionFilter = null;
+                    txtSearch.Text = string.Empty;
+                    btnCountries.PerformClick();
+                }
             }
             else if (tag == "countries")
             {
-                // Подвійний клік на країну — перейти до регіонів та відфільтрувати
-                int index = dataGridView.CurrentRow.Index;
-                var country = _dataManager.Countries[index];
-                _countryFilter = country.Name;
-                _regionFilter = null;
-                txtSearch.Text = string.Empty;
-                btnRegions.PerformClick();
+                // Отримуємо назву країни прямо з DataGridView
+                var countryName = dataGridView.CurrentRow.Cells["Назва"].Value?.ToString();
+                if (!string.IsNullOrEmpty(countryName))
+                {
+                    _countryFilter = countryName;
+                    _regionFilter = null;
+                    txtSearch.Text = string.Empty;
+                    btnRegions.PerformClick();
+                }
             }
             else if (tag == "regions")
             {
-                // Подвійний клік на регіон — перейти до міст та відфільтрувати
-                int index = dataGridView.CurrentRow.Index;
-                var region = _dataManager.Regions[index];
-                _regionFilter = region.Name;
-                txtSearch.Text = string.Empty;
-                btnCities.PerformClick();
+                // Отримуємо назву регіону прямо з DataGridView
+                var regionName = dataGridView.CurrentRow.Cells["Назва"].Value?.ToString();
+                if (!string.IsNullOrEmpty(regionName))
+                {
+                    _regionFilter = regionName;
+                    txtSearch.Text = string.Empty;
+                    btnCities.PerformClick();
+                }
             }
         }
     }

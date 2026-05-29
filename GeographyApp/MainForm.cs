@@ -493,7 +493,7 @@ namespace GeographyApp
         private void btnSortByPopulation_Click(object sender, EventArgs e)
         {
             var comparer = new GeographicObjectComparer(GeographicObjectComparer.SortBy.Population);
-            SortCurrentView(comparer, CountryComparer.SortBy.Population);
+            SortCurrentView(comparer, CountryComparer.SortBy.Population, ContinentComparer.SortBy.Population);
         }
 
         private void btnSortByArea_Click(object sender, EventArgs e)
@@ -502,8 +502,7 @@ namespace GeographyApp
 
             if (tag == "continents")
             {
-                _dataManager.Continents.Sort(
-                    Comparer<Continent>.Create((a, b) => a.Area.CompareTo(b.Area)));
+                _dataManager.Continents.Sort(new ContinentComparer(ContinentComparer.SortBy.Area));
                 ShowContinents();
             }
             else if (tag == "countries")
@@ -518,28 +517,107 @@ namespace GeographyApp
             }
         }
 
-        private void SortCurrentView(GeographicObjectComparer comparer, CountryComparer.SortBy countrySortBy)
+        private void SortCurrentView(GeographicObjectComparer comparer,
+            CountryComparer.SortBy countrySortBy,
+            ContinentComparer.SortBy continentSortBy = ContinentComparer.SortBy.Name)
         {
-            switch (dataGridView.Tag?.ToString())
+            string tag = dataGridView.Tag?.ToString();
+            string query = txtSearch.Text.Trim().ToLower();
+
+            switch (tag)
             {
                 case "continents":
-                    _dataManager.Continents.Sort(comparer);
-                    ShowContinents();
-                    break;
+                    {
+                        var list = _dataManager.Continents;
+                        var filtered = string.IsNullOrEmpty(query)
+                            ? list.ToList()
+                            : list.Where(c => c.Name.ToLower().Contains(query)).ToList();
 
+                        filtered.Sort(new ContinentComparer(continentSortBy));
+
+                        dataGridView.DataSource = filtered
+                            .Select(c => new
+                            {
+                                Назва = c.Name,
+                                Населення = c.Population.ToString("N0"),
+                                Площа_км2 = c.Area.ToString("N0")
+                            }).ToList();
+
+                        statusLabel.Text = $"Материки: {filtered.Count} записів";
+                    }
+                    break;
                 case "countries":
-                    _dataManager.Countries.Sort(new CountryComparer(countrySortBy));
-                    ShowCountries();
-                    break;
+                    {
+                        var list = _dataManager.Countries;
+                        var filtered = string.IsNullOrEmpty(query)
+                            ? list.ToList()
+                            : list.Where(c => c.Name.ToLower().Contains(query) ||
+                                              c.Capital.ToLower().Contains(query) ||
+                                              c.Continent.Name.ToLower().Contains(query)).ToList();
 
+                        filtered.Sort(new CountryComparer(countrySortBy));
+
+                        dataGridView.DataSource = filtered
+                            .Select(c => new
+                            {
+                                Назва = c.Name,
+                                Материк = c.Continent.Name,
+                                Населення = c.Population.ToString("N0"),
+                                Площа_км2 = c.Area.ToString("N0"),
+                                Столиця = c.Capital,
+                                Форма_правління = c.GovernmentForm
+                            }).ToList();
+
+                        statusLabel.Text = $"Країни: {filtered.Count} записів";
+                    }
+                    break;
                 case "regions":
-                    _dataManager.Regions.Sort(comparer);
-                    ShowRegions();
-                    break;
+                    {
+                        var list = _dataManager.Regions;
+                        var filtered = string.IsNullOrEmpty(query)
+                            ? list.ToList()
+                            : list.Where(r => r.Name.ToLower().Contains(query) ||
+                                              r.Country.Name.ToLower().Contains(query)).ToList();
 
+                        filtered.Sort(comparer);
+
+                        dataGridView.DataSource = filtered
+                            .Select(r => new
+                            {
+                                Назва = r.Name,
+                                Тип = r.RegionType,
+                                Країна = r.Country.Name,
+                                Населення = r.Population.ToString("N0"),
+                                Адм_центр = r.Capital
+                            }).ToList();
+
+                        statusLabel.Text = $"Регіони: {filtered.Count} записів";
+                    }
+                    break;
                 case "cities":
-                    _dataManager.Cities.Sort(comparer);
-                    ShowCities();
+                    {
+                        var list = _dataManager.Cities;
+                        var filtered = string.IsNullOrEmpty(query)
+                            ? list.ToList()
+                            : list.Where(c => c.Name.ToLower().Contains(query) ||
+                                              c.Country.Name.ToLower().Contains(query) ||
+                                              c.Region.Name.ToLower().Contains(query)).ToList();
+
+                        filtered.Sort(comparer);
+
+                        dataGridView.DataSource = filtered
+                            .Select(c => new
+                            {
+                                Назва = c.Name,
+                                Країна = c.Country.Name,
+                                Регіон = c.Region.Name,
+                                Населення = c.Population.ToString("N0"),
+                                Широта = c.Latitude.ToString("F4"),
+                                Довгота = c.Longitude.ToString("F4")
+                            }).ToList();
+
+                        statusLabel.Text = $"Міста: {filtered.Count} записів";
+                    }
                     break;
             }
         }

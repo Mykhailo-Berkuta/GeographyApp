@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
 
-namespace GeographyApp.Models
+namespace GeographyApp.Models.Comparers
 {
     /// <summary>
     /// Порівнювач для Continent — підтримує сортування за назвою, населенням і площею.

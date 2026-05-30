@@ -1,4 +1,5 @@
 using GeographyApp.Models;
+using GeographyApp.Models.Comparers;
 using GeographyApp.Services;
 
 namespace GeographyApp

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GeographyApp.Models
+namespace GeographyApp.Models.Comparers
 {
     /// <summary>
     /// Порівнювач для Region — підтримує сортування за назвою, населенням та типом.

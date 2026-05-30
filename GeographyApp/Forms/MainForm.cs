@@ -33,7 +33,7 @@ namespace GeographyApp
             }
             catch (Exception ex)
             {
-                // Некритична помилка завантаження — показуємо дружнє повідомлення і завантажуємо тестові дані
+                // Некритична помилка завантаження показуємо дружнє повідомлення і завантажуємо тестові дані
                 MessageBox.Show("Не вдалося завантажити дані з файлу. Буде завантажено тестові дані.\n\nДеталі: " + ex.Message,
                     "Помилка завантаження", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 try
@@ -65,7 +65,7 @@ namespace GeographyApp
             dataGridView.DoubleClick += DataGridView_DoubleClick;
         }
 
-        // Helper: safely get cell value by column header name
+        // безпечно отримати значення комірки за назвою заголовка стовпця
         private string? GetSelectedCellValue(string columnName)
         {
             try
@@ -79,8 +79,8 @@ namespace GeographyApp
                 return null;
             }
         }
-        
-        // Helper: find index in list by name (case-insensitive)
+
+        // знайти індекс у списку за назвою (без урахування регістру)
         private int FindIndexByName<T>(System.Collections.Generic.List<T> list, string name) where T : GeographicObject
         {
             return list.FindIndex(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
